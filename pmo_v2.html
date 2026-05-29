@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCCM PMO — Universal Cornea Care Mission</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F8FA;
+  --surface: #FFFFFF;
+  --surface-2: #F2F4F8;
+  --border: #E4E8F0;
+  --border-2: #D0D8E8;
+  --text-primary: #0F1B2D;
+  --text-secondary: #526079;
+  --text-muted: #8A9BB5;
+  --accent: #1847A8;
+  --accent-light: #EBF0FF;
+  --accent-hover: #1439A0;
+  --green: #0D7A5F;
+  --green-bg: #E8F7F2;
+  --amber: #B45309;
+  --amber-bg: #FEF3C7;
+  --red: #B91C1C;
+  --red-bg: #FEE2E2;
+  --purple: #6D28D9;
+  --purple-bg: #EDE9FE;
+  --teal: #0891B2;
+  --teal-bg: #E0F2FE;
+  --shadow-sm: 0 1px 3px rgba(15,27,45,0.06), 0 1px 2px rgba(15,27,45,0.04);
+  --shadow-md: 0 4px 12px rgba(15,27,45,0.08), 0 2px 6px rgba(15,27,45,0.04);
+  --shadow-lg: 0 8px 24px rgba(15,27,45,0.10), 0 4px 8px rgba(15,27,45,0.04);
+  --r: 10px;
+  --r-sm: 6px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); font-size: 13.5px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── SIDEBAR ─────────────────────────────────────────── */
+.sidebar {
+  width: 228px; background: var(--text-primary); flex-shrink: 0;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.sidebar-logo {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.logo-mark { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+.logo-eye {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+}
+.logo-eye svg { width: 16px; height: 16px; fill: white; }
+.logo-name { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.3px; }
+.logo-sub { font-size: 10.5px; color: rgba(255,255,255,0.38); padding-left: 40px; }
+
+.nav-group { padding: 20px 10px 6px; font-size: 9.5px; font-weight: 600; color: rgba(255,255,255,0.28); text-transform: uppercase; letter-spacing: 1.2px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+  border-radius: var(--r-sm); cursor: pointer; color: rgba(255,255,255,0.52);
+  font-size: 12.5px; font-weight: 500; transition: all .15s; margin: 1px 6px;
+}
+.nav-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.85); }
+.nav-item.active { background: var(--accent); color: #fff; }
+.nav-item i { font-size: 15px; width: 17px; flex-shrink: 0; }
+.nav-item .nav-label { flex: 1; }
+.nav-item .nav-count { font-size: 10px; background: rgba(255,255,255,0.12); padding: 1px 6px; border-radius: 10px; }
+.nav-item.active .nav-count { background: rgba(255,255,255,0.22); }
+
+.sidebar-user {
+  margin: auto 10px 14px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.06);
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+}
+.user-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+  font-size: 10.5px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.user-name { font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,0.85); }
+.user-role { font-size: 10px; color: rgba(255,255,255,0.4); }
+
+/* ── MAIN ────────────────────────────────────────────── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 54px; display: flex; align-items: center;
+  justify-content: space-between; flex-shrink: 0; box-shadow: var(--shadow-sm);
+}
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+.topbar-breadcrumb { font-size: 11px; color: var(--text-muted); }
+.topbar-title { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+/* ── BUTTONS ─────────────────────────────────────────── */
+.btn {
+  padding: 6px 14px; border-radius: var(--r-sm); border: 1px solid var(--border);
+  background: var(--surface); color: var(--text-secondary); cursor: pointer;
+  font-size: 12px; font-weight: 500; display: inline-flex; align-items: center;
+  gap: 5px; transition: all .15s; font-family: inherit; white-space: nowrap;
+}
+.btn:hover { background: var(--surface-2); border-color: var(--border-2); color: var(--text-primary); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #fff; }
+.btn-ghost { background: transparent; border-color: transparent; }
+.btn-ghost:hover { background: var(--surface-2); border-color: var(--border); }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+.btn-danger { background: var(--red-bg); border-color: #FCA5A5; color: var(--red); }
+.btn-danger:hover { background: #FEE2E2; }
+.btn-success { background: var(--green-bg); border-color: #6EE7B7; color: var(--green); }
+
+/* ── CONTENT ─────────────────────────────────────────── */
+.content { flex: 1; overflow-y: auto; padding: 24px; }
+.content::-webkit-scrollbar { width: 5px; }
+.content::-webkit-scrollbar-track { background: transparent; }
+.content::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+
+/* ── LAYOUT ─────────────────────────────────────────── */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ── CARD ────────────────────────────────────────────── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 18px; box-shadow: var(--shadow-sm);
+}
+.card-sm { padding: 14px; }
+.card-title {
+  font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 7px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.card-title i { font-size: 14px; color: var(--accent); }
+
+/* ── KPI TILES ───────────────────────────────────────── */
+.kpi {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 16px 18px; box-shadow: var(--shadow-sm);
+  position: relative; overflow: hidden;
+}
+.kpi::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--kpi-accent, var(--accent)); border-radius: var(--r) var(--r) 0 0;
+}
+.kpi-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.kpi-value { font-size: 26px; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 5px; font-family: 'DM Serif Display', serif; }
+.kpi-sub { font-size: 11px; color: var(--text-muted); }
+.kpi-sub.ok { color: var(--green); }
+.kpi-sub.warn { color: var(--amber); }
+.kpi-sub.danger { color: var(--red); }
+.kpi-icon { position: absolute; right: 14px; top: 18px; font-size: 20px; opacity: 0.12; color: var(--text-primary); }
+
+/* ── BADGES ──────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;
+}
+.badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.7; }
+.badge-success { background: var(--green-bg); color: var(--green); }
+.badge-warning { background: var(--amber-bg); color: var(--amber); }
+.badge-danger  { background: var(--red-bg); color: var(--red); }
+.badge-info    { background: var(--teal-bg); color: var(--teal); }
+.badge-purple  { background: var(--purple-bg); color: var(--purple); }
+.badge-gray    { background: var(--surface-2); color: var(--text-secondary); }
+.badge-accent  { background: var(--accent-light); color: var(--accent); }
+
+/* ── PROGRESS ────────────────────────────────────────── */
+.progress-bar { height: 5px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+
+/* ── TABLE ───────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+thead tr { border-bottom: 2px solid var(--border); }
+th { padding: 9px 12px; text-align: left; color: var(--text-muted); font-weight: 600; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--surface-2); }
+
+/* ── TAGS ────────────────────────────────────────────── */
+.tag {
+  display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 10.5px;
+  font-weight: 600; background: var(--accent-light); color: var(--accent);
+}
+
+/* ── TABS ────────────────────────────────────────────── */
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+.tab {
+  padding: 8px 14px; cursor: pointer; color: var(--text-muted); font-size: 12.5px;
+  font-weight: 500; border-bottom: 2px solid transparent; transition: all .15s; margin-bottom: -1px;
+}
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.tab:hover:not(.active) { color: var(--text-primary); }
+
+/* ── SECTION HEADING ─────────────────────────────────── */
+.section-heading {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.section-title { font-size: 14px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+.section-title i { font-size: 16px; color: var(--accent); }
+.section-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+
+/* ── ALERTS ──────────────────────────────────────────── */
+.alert-row {
+  display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px;
+  border-radius: var(--r-sm); margin-bottom: 6px; font-size: 12.5px;
+}
+.alert-danger  { background: #FFF5F5; border: 1px solid #FED7D7; color: #822727; }
+.alert-warning { background: #FFFBEB; border: 1px solid #FDE68A; color: #7C4A00; }
+.alert-info    { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; }
+.alert-row i { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── TIMELINE ────────────────────────────────────────── */
+.timeline-row { display: flex; align-items: center; margin-bottom: 10px; gap: 12px; }
+.timeline-label { width: 160px; font-size: 11.5px; color: var(--text-secondary); flex-shrink: 0; font-weight: 500; line-height: 1.2; }
+.timeline-bar-wrap { flex: 1; background: var(--surface-2); border-radius: 4px; height: 20px; position: relative; overflow: hidden; }
+.timeline-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 8px; font-size: 10.5px; font-weight: 600; color: #fff; white-space: nowrap; position: absolute; }
+
+/* ── RISK ────────────────────────────────────────────── */
+.risk-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--r-sm); background: var(--surface-2); border: 1px solid var(--border); margin-bottom: 8px; }
+.risk-score { width: 34px; height: 34px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+
+/* ── CHART WRAP ──────────────────────────────────────── */
+.chart-wrap { position: relative; height: 220px; width: 100%; }
+
+/* ── MODAL ───────────────────────────────────────────── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(15,27,45,0.35); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; width: 500px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+.modal-title { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 18px; }
+.form-group { margin-bottom: 13px; }
+.form-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 8px 10px; color: var(--text-primary); font-size: 13px; outline: none; font-family: inherit; transition: border-color .15s; }
+.form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.form-select { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 8px 10px; color: var(--text-primary); font-size: 13px; outline: none; font-family: inherit; }
+
+/* ── NOTIFICATION ────────────────────────────────────── */
+.notification { position: fixed; top: 16px; right: 16px; background: var(--text-primary); border-radius: 8px; padding: 12px 16px; color: #fff; font-size: 13px; z-index: 2000; animation: slideIn .25s ease; max-width: 320px; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-lg); }
+@keyframes slideIn { from { transform: translateX(16px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* ── HIER NODE ───────────────────────────────────────── */
+.hier-node { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 6px 12px; font-size: 11.5px; color: var(--text-secondary); margin: 4px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all .15s; box-shadow: var(--shadow-sm); }
+.hier-node:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+/* ── VENDOR CARD ──────────────────────────────────────── */
+.vendor-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+
+/* ── AVATAR ──────────────────────────────────────────── */
+.avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10.5px; font-weight: 700; flex-shrink: 0; }
+
+/* ─────────────────────────────────────────────────────── */
+/*  STRATEGY HOUSE  — Premium Redesign                    */
+/* ─────────────────────────────────────────────────────── */
+
+.sh-wrapper { margin-bottom: 24px; }
+
+/* Vision Banner */
+.sh-vision {
+  background: linear-gradient(105deg, #0F1B2D 0%, #1847A8 60%, #1C5AE8 100%);
+  border-radius: 12px 12px 0 0;
+  padding: 22px 32px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.sh-vision::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.sh-vision-text { text-align: center; position: relative; z-index: 1; }
+.sh-vision-label { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+.sh-vision-title { font-size: 17px; font-weight: 400; color: #fff; font-family: 'DM Serif Display', serif; }
+.sh-vision-title strong { color: #FFD700; font-weight: 400; font-style: italic; }
+.sh-vision-tagline { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+/* Track headers */
+.sh-grid {
+  display: grid;
+  grid-template-columns: 160px repeat(4, 1fr);
+  border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+}
+
+.sh-track-header {
+  padding: 14px 10px;
+  text-align: center;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  color: #fff;
+  border-right: 1px solid rgba(255,255,255,0.12);
+}
+.sh-track-header:last-child { border-right: none; }
+.sh-track-header .sh-track-icon { font-size: 18px; margin-bottom: 6px; opacity: 0.9; }
+
+.sh-row-label {
+  padding: 10px 12px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+}
+.sh-row-label-text {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.7px; color: #fff; writing-mode: initial; line-height: 1.3;
+  text-align: left;
+}
+
+.sh-cell {
+  padding: 9px 10px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-size: 11.5px; color: var(--text-secondary);
+  text-align: center; vertical-align: middle;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .12s;
+  line-height: 1.35;
+}
+.sh-cell:last-child { border-right: none; }
+.sh-cell:hover { background: var(--accent-light); color: var(--accent); }
+
+.sh-cell-ai {
+  background: #F0F4FF;
+  font-style: italic; color: var(--accent);
+  font-weight: 500;
+}
+.sh-cell-ai:hover { background: #D8E4FF; }
+
+/* Empty corner */
+.sh-corner {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+/* KPI outcome row */
+.sh-outcome-label {
+  padding: 14px 12px;
+  border-right: 1px solid var(--border);
+  background: #FFFBEB;
+  display: flex; align-items: center; justify-content: center;
+}
+.sh-outcome-label-text { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: var(--amber); text-align: center; }
+.sh-outcome-cell {
+  padding: 12px 10px;
+  border-right: 1px solid var(--border);
+  background: #FFFBEB;
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 3px;
+}
+.sh-outcome-cell:last-child { border-right: none; }
+.sh-outcome-metric { font-size: 11px; font-weight: 600; color: var(--amber); text-align: center; }
+.sh-outcome-sub { font-size: 9.5px; color: #92400E; opacity: 0.75; text-align: center; }
+
+/* Pillar progress strip */
+.sh-pillar-progress {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 18px; margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.sh-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.sh-progress-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+.sh-pillars-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.sh-pillar-block { padding: 14px; background: var(--surface-2); border-radius: var(--r-sm); border: 1px solid var(--border); }
+.sh-pillar-name { font-size: 11px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.sh-measure { margin-bottom: 8px; }
+.sh-measure-label { font-size: 10.5px; color: var(--text-muted); margin-bottom: 3px; display: flex; justify-content: space-between; }
+.sh-measure-pct { font-weight: 600; }
+
+/* Radar container */
+.sh-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ── ROLE PILL ────────────────────────────────────────── */
+.role-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 5px 10px; font-size: 11.5px;
+  color: var(--text-secondary); cursor: pointer;
+}
+.role-pill select { background: transparent; border: none; outline: none; font-family: inherit; font-size: 11.5px; color: var(--text-secondary); cursor: pointer; }
+.phase-badge { background: var(--accent); color: #fff; font-size: 10.5px; font-weight: 700; padding: 4px 10px; border-radius: 5px; letter-spacing: 0.5px; }
+
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+const DATA = {
+  currentUser: { name: 'Dr. Priya Sharma', role: 'Program Lead', avatar: 'PS' },
+  demoRole: 'Program Lead',
+  users: [
+    { id:1, name:'Dr. Priya Sharma', role:'Program Lead', email:'priya@lvpei.org', avatar:'PS' },
+    { id:2, name:'Rajesh Kumar', role:'Track Lead', email:'rajesh@lvpei.org', avatar:'RK' },
+    { id:3, name:'Anita Verma', role:'Project Owner', email:'anita@lvpei.org', avatar:'AV' },
+    { id:4, name:'Suresh Naidu', role:'Project Lead', email:'suresh@lvpei.org', avatar:'SN' },
+    { id:5, name:'TechCornea Ltd', role:'Vendor User', email:'contact@techcornea.com', avatar:'TC' },
+    { id:6, name:'EyeSoft Systems', role:'Vendor User', email:'ops@eyesoft.io', avatar:'ES' },
+  ],
+  programs: [
+    { id:1, name:'ML & AI Models', short:'ML Models', status:'Active', lead:'Rajesh Kumar', budget:4200000, spent:2850000, progress:68, startDate:'Jan 2024', endDate:'Dec 2025', projects:['P1','P2'], color:'#1847A8', colorBg:'#EBF0FF' },
+    { id:2, name:'Clinical Capacity & Training', short:'CADTE', status:'Active', lead:'Anita Verma', budget:3100000, spent:1920000, progress:52, startDate:'Mar 2024', endDate:'Sep 2025', projects:['P3','P4'], color:'#0D7A5F', colorBg:'#E8F7F2' },
+    { id:3, name:'Keratoconus Registry', short:'Keratoconus', status:'At Risk', lead:'Suresh Naidu', budget:2800000, spent:2200000, progress:44, startDate:'Feb 2024', endDate:'Jun 2025', projects:['P5'], color:'#B45309', colorBg:'#FEF3C7' },
+    { id:4, name:'ECHO Training', short:'ECHO', status:'Active', lead:'Rajesh Kumar', budget:1900000, spent:780000, progress:31, startDate:'Jul 2024', endDate:'Mar 2026', projects:['P6'], color:'#6D28D9', colorBg:'#EDE9FE' },
+    { id:5, name:'New Eye Banks', short:'Eye Banks', status:'Planning', lead:'Anita Verma', budget:5500000, spent:410000, progress:12, startDate:'Jan 2025', endDate:'Jun 2027', projects:['P7','P8'], color:'#0891B2', colorBg:'#E0F2FE' },
+  ],
+  projects: [
+    { id:'P1', name:'Cornea Detection AI', program:'ML Models', status:'Active', lead:'Suresh Naidu', budget:1800000, spent:1200000, progress:72, priority:'High', startDate:'Jan 2024', endDate:'Sep 2025', tasks:8, tasksComplete:6 },
+    { id:'P2', name:'Glaucoma Screening ML', program:'ML Models', status:'Active', lead:'Suresh Naidu', budget:2400000, spent:1650000, progress:64, priority:'High', startDate:'Mar 2024', endDate:'Dec 2025', tasks:10, tasksComplete:6 },
+    { id:'P3', name:'Clinical Training Portal', program:'CADTE', status:'Active', lead:'Anita Verma', budget:1500000, spent:920000, progress:55, priority:'Medium', startDate:'Apr 2024', endDate:'Aug 2025', tasks:7, tasksComplete:4 },
+    { id:'P4', name:'Telehealth Integration', program:'CADTE', status:'Delayed', lead:'Rajesh Kumar', budget:1600000, spent:1000000, progress:42, priority:'High', startDate:'Mar 2024', endDate:'Jun 2025', tasks:9, tasksComplete:4 },
+    { id:'P5', name:'Keratoconus Registry', program:'Keratoconus', status:'At Risk', lead:'Suresh Naidu', budget:2800000, spent:2200000, progress:44, priority:'Critical', startDate:'Feb 2024', endDate:'Apr 2025', tasks:11, tasksComplete:5 },
+    { id:'P6', name:'ECHO Training Module', program:'ECHO', status:'Active', lead:'Anita Verma', budget:1900000, spent:780000, progress:31, priority:'Medium', startDate:'Jul 2024', endDate:'Mar 2026', tasks:6, tasksComplete:2 },
+    { id:'P7', name:'Hyderabad Eye Bank', program:'Eye Banks', status:'Planning', lead:'Rajesh Kumar', budget:2800000, spent:210000, progress:8, priority:'High', startDate:'Jan 2025', endDate:'Dec 2026', tasks:14, tasksComplete:1 },
+    { id:'P8', name:'Chennai Eye Bank', program:'Eye Banks', status:'Planning', lead:'Suresh Naidu', budget:2700000, spent:200000, progress:10, priority:'High', startDate:'Mar 2025', endDate:'Mar 2027', tasks:14, tasksComplete:2 },
+  ],
+  tasks: [
+    { id:'T1', project:'P1', name:'Dataset Collection & Labeling', assignee:'TechCornea Ltd', status:'Complete', priority:'High', due:'2024-06-30', dep:'', type:'FS' },
+    { id:'T2', project:'P1', name:'Model Architecture Design', assignee:'Suresh Naidu', status:'Complete', priority:'High', due:'2024-08-15', dep:'T1', type:'FS' },
+    { id:'T3', project:'P1', name:'Model Training Phase 1', assignee:'TechCornea Ltd', status:'Complete', priority:'High', due:'2024-10-30', dep:'T2', type:'FS' },
+    { id:'T4', project:'P1', name:'Validation & Testing', assignee:'EyeSoft Systems', status:'In Progress', priority:'High', due:'2025-02-28', dep:'T3', type:'FS' },
+    { id:'T5', project:'P1', name:'Clinical Integration', assignee:'Suresh Naidu', status:'In Progress', priority:'High', due:'2025-05-31', dep:'T4', type:'FS' },
+    { id:'T6', project:'P2', name:'Data Pipeline Setup', assignee:'TechCornea Ltd', status:'Complete', priority:'High', due:'2024-07-15', dep:'', type:'FS' },
+    { id:'T7', project:'P2', name:'Glaucoma Dataset Labeling', assignee:'EyeSoft Systems', status:'Complete', priority:'Medium', due:'2024-09-30', dep:'T6', type:'FS' },
+    { id:'T8', project:'P2', name:'Neural Network Development', assignee:'TechCornea Ltd', status:'In Progress', priority:'High', due:'2025-03-31', dep:'T7', type:'FS' },
+    { id:'T9', project:'P5', name:'Patient Registry Design', assignee:'Rajesh Kumar', status:'Complete', priority:'Critical', due:'2024-05-15', dep:'', type:'FS' },
+    { id:'T10', project:'P5', name:'Data Collection Protocol', assignee:'Anita Verma', status:'Overdue', priority:'Critical', due:'2025-01-31', dep:'T9', type:'FS' },
+    { id:'T11', project:'P5', name:'Clinical Site Setup', assignee:'Suresh Naidu', status:'Overdue', priority:'Critical', due:'2025-02-28', dep:'T10', type:'SS' },
+    { id:'T12', project:'P4', name:'API Integration Planning', assignee:'EyeSoft Systems', status:'Overdue', priority:'High', due:'2025-01-15', dep:'', type:'FS' },
+  ],
+  vendors: [
+    { id:'V1', name:'TechCornea Ltd', type:'AI / ML', status:'Approved', lead:'Dr. Amit Patel', contracts:2, tasks:8, performance:88, spend:1200000, onboarded:'15 Jan 2024', country:'India', scores: { quality: 92, delivery: 85, compliance: 80, value: 95 } },
+    { id:'V2', name:'EyeSoft Systems', type:'Software', status:'Approved', lead:'Sarah Chen', contracts:3, tasks:12, performance:76, spend:890000, onboarded:'20 Feb 2024', country:'USA', scores: { quality: 70, delivery: 75, compliance: 85, value: 74 } },
+    { id:'V3', name:'OptiDiag GmbH', type:'Diagnostics', status:'Under Review', lead:'Hans Mueller', contracts:1, tasks:4, performance:92, spend:340000, onboarded:'10 Jul 2024', country:'Germany', scores: { quality: 95, delivery: 90, compliance: 92, value: 91 } },
+    { id:'V4', name:'CorneaBank Partners', type:'Logistics', status:'Approved', lead:'Kavya Reddy', contracts:2, tasks:6, performance:95, spend:520000, onboarded:'5 Mar 2024', country:'India', scores: { quality: 94, delivery: 96, compliance: 95, value: 95 } },
+    { id:'V5', name:'VisionTech Analytics', type:'Analytics', status:'Pending', lead:'Michael Brown', contracts:0, tasks:0, performance:0, spend:0, onboarded:'20 Jan 2025', country:'UK', scores: { quality: 0, delivery: 0, compliance: 0, value: 0 } },
+  ],
+  risks: [
+    { id:'R1', project:'P5', title:'Patient data collection behind schedule', category:'Schedule', probability:4, impact:5, score:20, status:'Open', owner:'Suresh Naidu', raised:'10 Jan 2025', escalated:true, mitigation:'Add 2 temporary data entry operators; prioritize sites with existing MoUs.', nextReview:'05 Feb 2025' },
+    { id:'R2', project:'P4', title:'API vendor integration delays', category:'Vendor', probability:4, impact:4, score:16, status:'Mitigating', owner:'Rajesh Kumar', raised:'5 Jan 2025', escalated:true, mitigation:'Bi-weekly sync with EyeSoft CTO; exploring fallback to legacy API.', nextReview:'02 Feb 2025' },
+    { id:'R3', project:'P2', title:'ML model accuracy below threshold', category:'Technical', probability:3, impact:4, score:12, status:'Open', owner:'Suresh Naidu', raised:'18 Jan 2025', escalated:false, mitigation:'Increase training data diversity; hyperparameter tuning session scheduled.', nextReview:'10 Feb 2025' },
+    { id:'R4', project:'P7', title:'Site acquisition regulatory delays', category:'Regulatory', probability:3, impact:5, score:15, status:'Open', owner:'Anita Verma', raised:'22 Jan 2025', escalated:true, mitigation:'Engage local legal consultant; fast-track documentation with health ministry.', nextReview:'15 Feb 2025' },
+    { id:'R5', project:'P1', title:'GPU compute cost overrun', category:'Budget', probability:2, impact:4, score:8, status:'Mitigating', owner:'Rajesh Kumar', raised:'1 Dec 2024', escalated:false, mitigation:'Optimize model inference; move non-training workloads to CPU instances.', nextReview:'01 Feb 2025' },
+    { id:'R6', project:'P3', title:'Low anticipated user adoption', category:'Adoption', probability:3, impact:3, score:9, status:'Open', owner:'Anita Verma', raised:'15 Jan 2025', escalated:false, mitigation:'Incentivize top users; conduct localized training workshops.', nextReview:'20 Feb 2025' },
+  ],
+  issues: [
+    { id:'I1', project:'P5', title:'3 clinical sites not yet operational — awaiting MoU', category:'Operations', severity:'Critical', status:'Open', owner:'Suresh Naidu', raised:'20 Jan 2025', action:'MoU drafts sent to hospital boards; pending legal approval.', targetDate:'15 Feb 2025' },
+    { id:'I2', project:'P4', title:'EyeSoft API v2 incompatible with legacy EMR', category:'Technical', severity:'High', status:'In Progress', owner:'Rajesh Kumar', raised:'8 Jan 2025', action:'Developer team working on middleware adapter; 60% complete.', targetDate:'10 Feb 2025' },
+    { id:'I3', project:'P2', title:'Training dataset labeling quality below threshold', category:'Quality', severity:'Medium', status:'Resolved', owner:'TechCornea Ltd', raised:'10 Dec 2024', action:'Retraining provided to labeling team; secondary audit implemented.', targetDate:'25 Jan 2025' },
+    { id:'I4', project:'P7', title:'Vendor procurement documentation incomplete', category:'Compliance', severity:'High', status:'Open', owner:'Anita Verma', raised:'25 Jan 2025', action:'Missing annexures requested from 2 bidders.', targetDate:'05 Feb 2025' },
+  ],
+  strategy: {
+    vision: '50% reduction in avoidable corneal blindness in India by 2035',
+    mission: 'Universal, equitable access to high-quality corneal care for every Indian',
+    phase: 'Phase 2 — Scale & Deepen (2024–2027)',
+    tracks: [
+      { name: 'Early Detection & Triage', icon: 'ti-eye-search', color: '#1847A8', bg: '#EBF0FF' },
+      { name: 'Diagnosis + Treatment', icon: 'ti-microscope', color: '#0D7A5F', bg: '#E8F7F2' },
+      { name: 'Eye Banking & Transplants', icon: 'ti-building-hospital', color: '#6D28D9', bg: '#EDE9FE' },
+      { name: 'Sustained Care & Support', icon: 'ti-heart-handshake', color: '#0891B2', bg: '#E0F2FE' },
+    ],
+    initiatives: [
+      // row: Programs & Projects (top rows, initiative-level)
+      ['School Eye Health Screening Programme', 'Clinical Capacity Expansion + TeleOphthalmology', 'Upgrade & Accredit Existing Eye Banks', 'Keratoplasty Chatbot & Helpline'],
+      ['ML-Enabled Rural Centres & Mobile Diagnostic Unit', 'Centre of Excellence for Contact Lenses', 'Establish 4 New Regional Eye Banks', 'Patient Education & Support Resources'],
+      ['Microbiology Reading Centre', 'Eye Trauma Hub — 10 Tier-2 Cities', 'Universal Cornea Distribution System', ''],
+      // AI row (special)
+      ['AI Model for Infection Detection', 'AI Algorithm for Keratoconus Grading', 'AI Model for Cornea Donor Evaluation', 'AI Model for Keratoplasty Outcome Prediction'],
+    ],
+    enablers: [
+      { name: 'Digital Public Infrastructure', color: '#6D28D9', bg: '#6D28D9', cells: ['Templates & Screening Software', 'Cornea University (LMS)', 'Sight Connect Eye Bank Platform', 'Follow-up Care & CRM Platform'] },
+      { name: 'Capacity Building', color: '#1847A8', bg: '#1847A8', cells: ['Allied Ophthalmic Personnel Training', 'Cornea Specialist Residency Programme', 'Training of Eye Bank Personnel', 'Community Ophthalmology Network'] },
+      { name: 'Prevention & Policy Advocacy', color: '#0D7A5F', bg: '#0D7A5F', cells: ['Community Engagement & IEC Campaigns', 'National Epidemiology Surveys', 'iPledge — Donor Enrolment Platform', 'National Cornea Disease Registry'] },
+    ],
+    outcomes: [
+      { metric: '% patients detected early', sub: 'Annual detection rate' },
+      { metric: '% increase in patients served', sub: 'Volume + quality index' },
+      { metric: '% increase in corneas collected', sub: 'Utilisation rate' },
+      { metric: '% reduction in dropout', sub: 'Follow-up care continuity' },
+    ],
+    pillars: [
+      { name: 'Clinical Excellence', color: '#1847A8', measures: [
+        { name: 'Corneal transplants / year', target: 5000, actual: 3420, unit: '' },
+        { name: 'Success rate (1-yr post-op)', target: 92, actual: 89, unit: '%' },
+        { name: 'Average wait-time reduction', target: 40, actual: 28, unit: '%' },
+      ]},
+      { name: 'Technology & AI', color: '#0D7A5F', measures: [
+        { name: 'AI screening accuracy', target: 95, actual: 87, unit: '%' },
+        { name: 'Telehealth consultations / yr', target: 10000, actual: 6200, unit: '' },
+        { name: 'Clinical sites using AI tools', target: 25, actual: 12, unit: '' },
+      ]},
+      { name: 'Eye Bank Network', color: '#6D28D9', measures: [
+        { name: 'Active eye banks', target: 10, actual: 6, unit: '' },
+        { name: 'Corneas procured annually', target: 8000, actual: 4800, unit: '' },
+        { name: 'Cornea utilisation rate', target: 88, actual: 72, unit: '%' },
+      ]},
+      { name: 'Training & Capacity', color: '#0891B2', measures: [
+        { name: 'Fellows trained / year', target: 200, actual: 134, unit: '' },
+        { name: 'Partner hospitals', target: 50, actual: 31, unit: '' },
+        { name: 'ECHO sessions delivered', target: 500, actual: 187, unit: '' },
+      ]},
+    ]
+  },
+  alerts: [
+    { type:'danger', msg:'Keratoconus Registry — 2 tasks overdue (T10, T11), 3 clinical sites not operational' },
+    { type:'danger', msg:'Telehealth Integration — API integration overdue 45 days, vendor escalation raised' },
+    { type:'warning', msg:'Keratoconus budget at 79% utilisation with only 44% completion' },
+    { type:'warning', msg:'Glaucoma Screening ML — model accuracy at 87%, below the 85% clinical threshold' },
+    { type:'info', msg:'New Eye Banks programme onboarding 2 vendors — approval pending PMO sign-off' },
+    { type:'info', msg:'Weekly status report due in 2 days for all Track Leads' },
+  ]
+};
+
+let activeTab = 'dashboard';
+let notification = null;
+let modal = null;
+let activeSubTab = 0;
+let riskFilter = { impact: null, prob: null };
+let projectProgramFilter = 'All';
+let selectedProjectId = null;
+
+function fmt(n) {
+  if (n >= 10000000) return (n / 10000000).toFixed(2) + ' Cr';
+  if (n >= 100000) return (n / 100000).toFixed(2) + ' Lakh';
+  return n.toLocaleString('en-IN');
+}
+function fmtL(n) {
+  if (n >= 10000000) return (n / 10000000).toFixed(1) + 'Cr';
+  if (n >= 100000) return (n / 100000).toFixed(1) + 'L';
+  if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
+  return n;
+}
+function pct(a,b){ return Math.round(a/b*100); }
+
+function statusBadge(s){
+  const m={Active:'success',Complete:'success',Approved:'success','In Progress':'info',Planning:'gray',Delayed:'warning','At Risk':'warning','Under Review':'warning',Overdue:'danger',Open:'danger',Critical:'danger',Mitigating:'warning',Resolved:'success',Pending:'gray'};
+  return `<span class="badge badge-${m[s]||'gray'}">${s}</span>`;
+}
+function priorityBadge(p){
+  const m={Critical:'danger',High:'warning',Medium:'info',Low:'gray'};
+  return `<span class="badge badge-${m[p]||'gray'}">${p}</span>`;
+}
+function riskColor(s){
+  if(s>=15)return{bg:'#FEE2E2',color:'#B91C1C'};
+  if(s>=8) return{bg:'#FEF3C7',color:'#B45309'};
+  return{bg:'#E8F7F2',color:'#0D7A5F'};
+}
+function progressColor(p){
+  if(p>=70) return '#0D7A5F';
+  if(p>=40) return '#1847A8';
+  return '#B45309';
+}
+function avatarColor(i){
+  const c=['#1847A8','#0D7A5F','#6D28D9','#0891B2','#B45309'];
+  return c[i%c.length];
+}
+
+function showNotification(msg){ notification=msg; render(); setTimeout(()=>{notification=null;render();},3000); }
+function openModal(type,data){ modal={type,data}; render(); }
+function closeModal(){ modal=null; render(); }
+function render(){ document.getElementById('app').innerHTML=buildApp(); initCharts(); }
+
+function tabIcon(t){
+  const m={dashboard:'layout-dashboard',portfolio:'hierarchy',programs:'stack',projects:'folder',budgeting:'currency-rupee',risks:'alert-triangle',vendors:'building-community',strategy:'target'};
+  return m[t]||'circle';
+}
+function tabLabel(t){
+  const m={dashboard:'Dashboard',portfolio:'Portfolio Overview',programs:'Programs',projects:'Projects',budgeting:'Budgeting',risks:'Risks & Issues',vendors:'Vendors',strategy:'Strategy House'};
+  return m[t]||t;
+}
+function handleAdd(){
+  const addMap={dashboard:'risk',projects:'task',programs:'program',vendors:'vendor',budgeting:'budget',risks:'risk'};
+  openModal(addMap[activeTab]||'task',{});
+}
+
+/* ─── APP SHELL ─────────────────────────────────────── */
+function buildApp(){
+  const riskCount = DATA.risks.filter(r=>r.status==='Open').length;
+  return `
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-eye">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5C7 5 2.73 8.11 1 12.5 2.73 16.89 7 20 12 20s9.27-3.11 11-7.5C21.27 8.11 17 5 12 5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        </div>
+        <div class="logo-name">UCCM PMO</div>
+      </div>
+      <div class="logo-sub">Universal Cornea Care Mission</div>
+    </div>
+
+    <div class="nav-group">Core</div>
+    ${['dashboard','portfolio','programs','projects'].map(tab=>`
+      <div class="nav-item ${activeTab===tab?'active':''}" onclick="setTab('${tab}')">
+        <i class="ti ti-${tabIcon(tab)}"></i>
+        <span class="nav-label">${tabLabel(tab)}</span>
+      </div>`).join('')}
+    <div class="nav-group">Finance & Risk</div>
+    <div class="nav-item ${activeTab==='budgeting'?'active':''}" onclick="setTab('budgeting')">
+      <i class="ti ti-currency-rupee"></i><span class="nav-label">Budgeting</span>
+    </div>
+    <div class="nav-item ${activeTab==='risks'?'active':''}" onclick="setTab('risks')">
+      <i class="ti ti-alert-triangle"></i><span class="nav-label">Risks & Issues</span>
+      <span class="nav-count">${riskCount}</span>
+    </div>
+    <div class="nav-group">Strategic</div>
+    ${['vendors','strategy'].map(tab=>`
+      <div class="nav-item ${activeTab===tab?'active':''}" onclick="setTab('${tab}')">
+        <i class="ti ti-${tabIcon(tab)}"></i>
+        <span class="nav-label">${tabLabel(tab)}</span>
+      </div>`).join('')}
+
+    <div class="sidebar-user">
+      <div class="user-avatar">${DATA.currentUser.avatar}</div>
+      <div>
+        <div class="user-name">${DATA.currentUser.name}</div>
+        <div class="user-role">${DATA.currentUser.role}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="topbar-breadcrumb">UCCM PMO</div>
+          <div class="topbar-title">${tabLabel(activeTab)}</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <div class="role-pill">
+          <i class="ti ti-user" style="font-size:13px;color:var(--text-muted)"></i>
+          Demo Role:&nbsp;
+          <select onchange="showNotification('Role switched to '+this.value)">
+            <option>Program Lead</option><option>Track Lead</option><option>Project Owner</option><option>Vendor User</option>
+          </select>
+        </div>
+        <div class="phase-badge">PHASE 2</div>
+        <button class="btn" onclick="showNotification('Exporting report...')"><i class="ti ti-download"></i>Export</button>
+        <button class="btn btn-primary" onclick="handleAdd()"><i class="ti ti-plus"></i>New</button>
+      </div>
+    </div>
+    <div class="content">${buildContent()}</div>
+  </div>
+  ${notification?`<div class="notification"><i class="ti ti-check-circle" style="font-size:16px;color:#6EE7B7"></i>${notification}</div>`:''}
+  ${modal?buildModal():''}
+  `;
+}
+
+/* ─── CONTENT ROUTER ────────────────────────────────── */
+function buildContent(){
+  switch(activeTab){
+    case'dashboard': return buildDashboard();
+    case'portfolio':  return buildPortfolio();
+    case'programs':   return buildPrograms();
+    case'projects':   return buildProjects();
+    case'budgeting':  return buildBudgeting();
+    case'risks':      return buildRisks();
+    case'vendors':    return buildVendors();
+    case'strategy':   return buildStrategy();
+    default: return '<div style="padding:40px;text-align:center;color:var(--text-muted)">Select a section</div>';
+  }
+}
+
+/* ─── DASHBOARD ─────────────────────────────────────── */
+function buildDashboard(){
+  const totalBudget = DATA.programs.reduce((a,p)=>a+p.budget,0);
+  const totalSpent  = DATA.programs.reduce((a,p)=>a+p.spent,0);
+  const overdueT    = DATA.tasks.filter(t=>t.status==='Overdue').length;
+  const openR       = DATA.risks.filter(r=>r.status==='Open'||r.status==='Mitigating').length;
+  const avgProgress = Math.round(DATA.projects.reduce((a,p)=>a+p.progress,0)/DATA.projects.length);
+
+  return `
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="kpi" style="--kpi-accent:#1847A8">
+      <i class="ti ti-stack kpi-icon"></i>
+      <div class="kpi-label">Active Programs</div>
+      <div class="kpi-value">5</div>
+      <div class="kpi-sub ok">3 on track · 1 at risk</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#0D7A5F">
+      <i class="ti ti-folder kpi-icon"></i>
+      <div class="kpi-label">Total Projects</div>
+      <div class="kpi-value">8</div>
+      <div class="kpi-sub warn">2 at risk · 1 delayed</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#B45309">
+      <i class="ti ti-currency-rupee kpi-icon"></i>
+      <div class="kpi-label">Portfolio Budget</div>
+      <div class="kpi-value">₹${fmt(totalBudget)}</div>
+      <div class="kpi-sub">${pct(totalSpent,totalBudget)}% utilised · ₹${fmt(totalBudget-totalSpent)} remaining</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#B91C1C">
+      <i class="ti ti-alert-triangle kpi-icon"></i>
+      <div class="kpi-label">Open Risks</div>
+      <div class="kpi-value" style="color:#B91C1C">${openR}</div>
+      <div class="kpi-sub danger">${overdueT} overdue tasks require attention</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    ${DATA.alerts.slice(0,4).map(a=>`
+      <div class="alert-row alert-${a.type}">
+        <i class="ti ti-${a.type==='danger'?'alert-circle':a.type==='warning'?'alert-triangle':'info-circle'}"></i>
+        <span>${a.msg}</span>
+      </div>`).join('')}
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-donut"></i>Budget Utilisation by Program</div>
+      <div class="chart-wrap"><canvas id="budgetChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-bar"></i>Program Progress</div>
+      <div class="chart-wrap"><canvas id="progressChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-clock"></i>Project Timeline Overview</div>
+      ${DATA.projects.slice(0,6).map(p=>`
+        <div class="timeline-row">
+          <div class="timeline-label" title="${p.name}">${p.name}</div>
+          <div class="timeline-bar-wrap">
+            <div class="timeline-bar" style="width:${p.progress}%;background:${progressColor(p.progress)}">${p.progress}%</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-alert-triangle"></i>Top Risks</div>
+      ${DATA.risks.slice(0,4).map(r=>{const c=riskColor(r.score); return `
+        <div class="risk-row">
+          <div class="risk-score" style="background:${c.bg};color:${c.color}">${r.score}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12.5px;font-weight:600;color:var(--text-primary)">${r.title}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${r.project} · ${r.category}</div>
+          </div>
+          ${statusBadge(r.status)}
+        </div>`}).join('')}
+    </div>
+  </div>`;
+}
+function buildPortfolio(){
+  const totalBudget = DATA.programs.reduce((a,p)=>a+p.budget,0);
+  const totalSpent  = DATA.programs.reduce((a,p)=>a+p.spent,0);
+  const activeProjects = DATA.projects.filter(p=>p.status==='Active').length;
+  const atRiskProjects = DATA.projects.filter(p=>p.status==='At Risk'||p.status==='Delayed').length;
+  const completedTasks = DATA.tasks.filter(t=>t.status==='Complete').length;
+
+  // Timeline bar: map date string to 0-100% within Jan2024–Mar2027
+  function timelinePct(dateStr){
+    const months = {'Jan':0,'Feb':1,'Mar':2,'Apr':3,'May':4,'Jun':5,'Jul':6,'Aug':7,'Sep':8,'Oct':9,'Nov':10,'Dec':11};
+    const [m,y] = dateStr.split(' ');
+    const base = (2024-2024)*12; // Jan 2024 = 0
+    const end  = (2027-2024)*12+2; // Mar 2027 = 38
+    const pos  = (parseInt(y)-2024)*12 + months[m];
+    return Math.round(Math.max(0,Math.min(100, (pos/end)*100)));
+  }
+
+  // Year markers for timeline
+  const yearMarkers = [
+    {label:'2024', pct:0}, {label:'2025', pct:Math.round(12/38*100)},
+    {label:'2026', pct:Math.round(24/38*100)}, {label:'2027', pct:Math.round(36/38*100)}
+  ];
+
+  return `
+  <!-- Top summary strip -->
+  <div class="grid-4" style="margin-bottom:22px">
+    <div class="kpi" style="--kpi-accent:#1847A8">
+      <i class="ti ti-stack kpi-icon"></i>
+      <div class="kpi-label">Programs</div>
+      <div class="kpi-value">5</div>
+      <div class="kpi-sub ok">3 active · 1 at risk</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#0D7A5F">
+      <i class="ti ti-folder kpi-icon"></i>
+      <div class="kpi-label">Projects</div>
+      <div class="kpi-value">8</div>
+      <div class="kpi-sub warn">${activeProjects} active · ${atRiskProjects} need attention</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#B45309">
+      <i class="ti ti-currency-rupee kpi-icon"></i>
+      <div class="kpi-label">Portfolio Budget</div>
+      <div class="kpi-value">₹${fmt(totalBudget)}</div>
+      <div class="kpi-sub">${pct(totalSpent,totalBudget)}% committed · ₹${fmt(totalBudget-totalSpent)} free</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#0891B2">
+      <i class="ti ti-list-check kpi-icon"></i>
+      <div class="kpi-label">Tasks Complete</div>
+      <div class="kpi-value">${completedTasks}/${DATA.tasks.length}</div>
+      <div class="kpi-sub">${DATA.tasks.filter(t=>t.status==='Overdue').length} overdue tasks</div>
+    </div>
+  </div>
+
+  <!-- ── GANTT TIMELINE (MOVED TO TOP) ────────────────── -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div class="section-title"><i class="ti ti-timeline"></i>Project Timeline Portfolio</div>
+    <span class="badge badge-gray" style="font-size:10px; font-weight:700">FY 2024 - FY 2027</span>
+  </div>
+  <div class="card" style="margin-bottom:24px; padding:20px">
+    <div style="display:flex;margin-bottom:8px;padding-left:200px;position:relative;height:20px">
+      ${yearMarkers.map(y=>`<div style="position:absolute;left:calc(200px + ${y.pct}%);font-size:10px;color:var(--text-muted);font-weight:700;transform:translateX(-50%)">${y.label}</div>`).join('')}
+    </div>
+    <div style="position:relative; padding-bottom:10px">
+      <div style="position:absolute;top:0;bottom:0;left:calc(200px + ${yearMarkers[1].pct}%);width:1px;background:var(--border);z-index:0"></div>
+      <div style="position:absolute;top:0;bottom:0;left:calc(200px + ${yearMarkers[2].pct}%);width:1px;background:var(--border);z-index:0"></div>
+      <div style="position:absolute;top:0;bottom:0;left:calc(200px + ${yearMarkers[3].pct}%);width:1px;background:var(--border);z-index:0"></div>
+      <div style="position:absolute;top:0;bottom:0;left:calc(200px + 41%);width:2px;background:#2563EB;z-index:1;opacity:0.4"></div>
+      <div style="position:absolute;top:-24px;left:calc(200px + 41%);font-size:10px;color:#2563EB;font-weight:800;transform:translateX(-50%)">Today</div>
+
+      ${DATA.projects.map((pr,i)=>{
+        const prog = DATA.programs.find(p=>p.projects.includes(pr.id));
+        const col = prog?prog.color:'#2563EB';
+        const sPct = timelinePct(pr.startDate);
+        const ePct = timelinePct(pr.endDate);
+        const widthPct = Math.max(3, ePct - sPct);
+        const statusDot = {Active:'#10B981',Delayed:'#F59E0B','At Risk':'#F59E0B',Planning:'#0891B2'}[pr.status]||'#94A3B8';
+        return `
+        <div style="display:flex;align-items:center;height:auto;min-height:34px;margin-bottom:6px;position:relative;z-index:2; cursor:pointer" onclick="navToProjectDetail('${pr.id}')">
+          <div style="width:200px;flex-shrink:0;display:flex;align-items:center;gap:8px;padding-right:16px">
+            <div style="width:8px;height:8px;border-radius:50%;background:${statusDot};flex-shrink:0"></div>
+            <div style="font-size:12px;font-weight:700;color:#0F172A;line-height:1.2">${pr.name}</div>
+          </div>
+          <div style="flex:1;position:relative;height:22px; background:rgba(241,245,249,0.5); border-radius:4px">
+            <div style="position:absolute;left:${sPct}%;width:${widthPct * (pr.progress/100)}%;height:22px;background:${col};border-radius:4px;box-shadow:0 2px 4px rgba(0,0,0,0.1)"></div>
+            <div style="position:absolute;left:${sPct + widthPct * (pr.progress/100)}%;width:${widthPct * (1-pr.progress/100)}%;height:22px;background:${col}15;border:1px solid ${col}30;border-left:none;border-radius:0 4px 4px 0"></div>
+            <div style="position:absolute;left:${sPct + widthPct + 2}%;top:50%;transform:translateY(-50%);font-size:10px;color:#475569;font-weight:800;white-space:nowrap">${pr.progress}%</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+
+  <!-- ── PROJECT HIERARCHY MAP ───────────────────────── -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div class="section-title"><i class="ti ti-hierarchy"></i>Program & Project Hierarchy</div>
+    <button class="btn btn-sm btn-ghost" onclick="setTab('projects')" style="font-weight:700; color:var(--accent)">View full list <i class="ti ti-arrow-right"></i></button>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:22px">
+    ${DATA.programs.map((p,pi)=>{
+      const projsForProgram = DATA.projects.filter(pr=>p.projects.includes(pr.id));
+      return `
+      <div style="display:flex;align-items:stretch;border-bottom:${pi<DATA.programs.length-1?'1px solid var(--border)':'none'}">
+        <!-- Program label -->
+        <div style="width:200px;flex-shrink:0;padding:16px;background:${p.colorBg};border-right:1px solid var(--border);display:flex;align-items:center;gap:10px">
+          <div style="width:10px;height:10px;border-radius:50%;background:${p.color};flex-shrink:0"></div>
+          <div>
+            <div style="font-size:12px;font-weight:800;color:${p.color};line-height:1.3">${p.name}</div>
+            <div style="font-size:10px;color:var(--text-muted);margin-top:2px; font-weight:700">${p.status.toUpperCase()}</div>
+          </div>
+        </div>
+        <!-- Projects in this program -->
+        <div style="flex:1;display:flex;flex-wrap:wrap;gap:12px;padding:14px;align-items:center">
+          ${projsForProgram.map(pr=>{
+            const statusColors = {Active:'#059669',Delayed:'#D97706','At Risk':'#D97706',Planning:'#0891B2'};
+            const statusBgs   = {Active:'#ECFDF5',Delayed:'#FFFBEB','At Risk':'#FFFBEB',Planning:'#F0F9FF'};
+            const sc = statusColors[pr.status]||'#64748B';
+            const sb = statusBgs[pr.status]||'#F8FAFC';
+            return `
+            <div onclick="navToProjectDetail('${pr.id}')" style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px;cursor:pointer;min-width:200px;max-width:240px;transition:all .15s;flex:1" onmouseover="this.style.borderColor='${p.color}';this.style.background='${p.colorBg}';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--surface-2)';this.style.transform='none'">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                <span style="font-size:9.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px">${pr.id}</span>
+                <span style="font-size:9.5px;font-weight:800;background:${sb};color:${sc};padding:2px 6px;border-radius:4px">${pr.status.toUpperCase()}</span>
+              </div>
+              <div style="font-size:12.5px;font-weight:800;color:#0F172A;line-height:1.3;margin-bottom:10px">${pr.name}</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <div class="progress-bar" style="flex:1;height:5px; background:#E2E8F0"><div class="progress-fill" style="width:${pr.progress}%;background:${p.color}"></div></div>
+                <span style="font-size:10px;color:#0F172A; font-weight:800">${pr.progress}%</span>
+              </div>
+              <div style="font-size:10.5px;color:var(--text-muted); font-weight:600">${pr.lead} · <span style="color:${pr.tasksComplete===pr.tasks?'#059669':'var(--text-muted)'}">${pr.tasksComplete}/${pr.tasks} tasks</span></div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+window.navToProjectDetail = function(projectId) {
+  activeTab = 'projects';
+  selectedProjectId = projectId;
+  projectProgramFilter = 'All'; // Clear filter when opening specific project
+  render();
+};
+
+/* ─── PROGRAMS ──────────────────────────────────────── */
+function buildPrograms(){
+  return `
+  <div class="section-heading">
+    <div>
+      <div class="section-title"><i class="ti ti-stack"></i>Program Portfolio</div>
+      <div class="section-sub">Consolidated view of all active and planned initiatives</div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('program',{})"><i class="ti ti-plus"></i>Add Program</button>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Program</th><th>Status</th><th>Lead</th><th>Budget</th><th>Spent</th><th>Utilisation</th><th>Progress</th><th></th></tr></thead>
+        <tbody>
+          ${DATA.programs.map((p,i)=>`<tr>
+            <td onclick="navToProgramProjects('${p.short||p.name}')" style="cursor:pointer">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:8px;height:32px;border-radius:3px;background:${p.color};flex-shrink:0"></div>
+                <div>
+                  <div style="font-weight:700; color:#0F172A">${p.name}</div>
+                  <div style="font-size:10.5px;color:var(--text-muted)">${p.startDate} → ${p.endDate}</div>
+                </div>
+              </div>
+            </td>
+            <td>${statusBadge(p.status)}</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:7px">
+                <div class="avatar" style="background:${avatarColor(i)};color:#fff;font-weight:700">${p.lead.split(' ').map(n=>n[0]).join('')}</div>
+                <span style="font-weight:600; color:#0F172A">${p.lead}</span>
+              </div>
+            </td>
+            <td style="font-weight:700">₹${fmt(p.budget)}</td>
+            <td style="color:${pct(p.spent,p.budget)>80?'#DC2626':'#0F172A'}; font-weight:700">₹${fmt(p.spent)}</td>
+            <td style="min-width:110px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="progress-bar" style="flex:1;height:6px; background:#F1F5F9"><div class="progress-fill" style="width:${pct(p.spent,p.budget)}%;background:${pct(p.spent,p.budget)>80?'#DC2626':'#F59E0B'}"></div></div>
+                <span style="font-size:11px;color:#0F172A;font-weight:800;min-width:30px">${pct(p.spent,p.budget)}%</span>
+              </div>
+            </td>
+            <td style="min-width:120px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="progress-bar" style="flex:1;height:6px; background:#F1F5F9"><div class="progress-fill" style="width:${p.progress}%;background:${progressColor(p.progress)}"></div></div>
+                <span style="font-size:11px;color:#0F172A;font-weight:800">${p.progress}%</span>
+              </div>
+            </td>
+            <td style="text-align:right"><button class="btn btn-sm" onclick="navToProgramProjects('${p.short||p.name}')">View Projects</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:#0F172A; font-weight:800"><i class="ti ti-chart-bar"></i>Budget Utilisation by Program</div>
+      <div class="chart-wrap" style="height:320px"><canvas id="programBudgetHBarChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:#0F172A; font-weight:800"><i class="ti ti-chart-pie"></i>Portfolio Distribution</div>
+      <div class="chart-wrap" style="height:320px"><canvas id="programDistributionChart"></canvas></div>
+    </div>
+  </div>`;
+}
+
+window.navToProgramProjects = function(progName) {
+  activeTab = 'projects';
+  projectProgramFilter = progName;
+  selectedProjectId = null;
+  render();
+};
+
+/* ─── PROJECTS ──────────────────────────────────────── */
+function buildProjects(){
+  if(selectedProjectId) return buildProjectDetail(selectedProjectId);
+
+  const tabs=['All Projects','Active','At Risk / Delayed','Planning'];
+  const filtered = DATA.projects.filter(p=>{
+    const matchesTab = (activeSubTab===0) || 
+                       (activeSubTab===1 && p.status==='Active') || 
+                       (activeSubTab===2 && (p.status==='At Risk'||p.status==='Delayed')) || 
+                       (activeSubTab===3 && p.status==='Planning');
+    const matchesProgram = (projectProgramFilter === 'All') || (p.program === projectProgramFilter);
+    return matchesTab && matchesProgram;
+  });
+
+  return `
+  <div class="section-heading">
+    <div>
+      <div class="section-title"><i class="ti ti-folder"></i>Project Portfolio</div>
+      <div class="section-sub">Detailed tracking of tasks, budgets, and milestones</div>
+    </div>
+    <div style="display:flex; gap:8px">
+      <div class="role-pill" style="background:var(--surface); border:1px solid var(--border)">
+        <i class="ti ti-filter" style="font-size:12px"></i>
+        Program:
+        <select onchange="setProjectProgramFilter(this.value)">
+          <option value="All">All Programs</option>
+          ${DATA.programs.map(p=>`<option value="${p.short||p.name}" ${projectProgramFilter===(p.short||p.name)?'selected':''}>${p.name}</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('task',{})"><i class="ti ti-plus"></i>Add Task</button>
+    </div>
+  </div>
+
+  <div class="tabs">${tabs.map((t,i)=>`<div class="tab ${activeSubTab===i?'active':''}" onclick="setSubTab(${i})">${t}</div>`).join('')}</div>
+  
+  <div class="card" style="margin-bottom:20px">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Project</th><th>Program</th><th>Status</th><th>Priority</th><th>Lead</th><th>Tasks</th><th>Progress</th><th></th></tr></thead>
+        <tbody>
+          ${filtered.length ? filtered.map((p,i)=>`<tr>
+            <td>
+              <div style="font-weight:700; color:#0F172A">${p.name}</div>
+              <div style="font-size:10.5px;color:var(--text-muted)">${p.startDate} → ${p.endDate}</div>
+            </td>
+            <td><span class="tag" style="font-weight:700">${p.program}</span></td>
+            <td>${statusBadge(p.status)}</td>
+            <td>${priorityBadge(p.priority)}</td>
+            <td style="color:#0F172A; font-weight:600">${p.lead}</td>
+            <td><span style="font-weight:800;color:#059669">${p.tasksComplete}</span><span style="color:var(--text-muted); font-weight:600">/${p.tasks}</span></td>
+            <td style="min-width:110px">
+              <div style="display:flex;align-items:center;gap:7px">
+                <div class="progress-bar" style="flex:1; height:6px; background:#F1F5F9"><div class="progress-fill" style="width:${p.progress}%;background:${progressColor(p.progress)}"></div></div>
+                <span style="font-size:12px;color:#0F172A; font-weight:800">${p.progress}%</span>
+              </div>
+            </td>
+            <td style="text-align:right"><button class="btn btn-sm btn-primary" onclick="setSelectedProject('${p.id}')">Open Project</button></td>
+          </tr>`).join('') : `<tr><td colspan="8" style="padding:40px; text-align:center; color:var(--text-muted)">No projects found matching the criteria</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function buildProjectDetail(id){
+  const p = DATA.projects.find(p=>p.id===id);
+  const tasks = DATA.tasks.filter(t=>t.project===id);
+  const prog = DATA.programs.find(pg=>(pg.short||pg.name)===p.program);
+
+  return `
+  <div style="margin-bottom:20px">
+    <button class="btn btn-sm btn-ghost" onclick="setSelectedProject(null)" style="margin-bottom:12px; font-weight:700; color:var(--accent)"><i class="ti ti-arrow-left"></i>Back to Portfolio</button>
+    <div style="display:flex; justify-content:space-between; align-items:flex-end">
+      <div>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px">
+          <span class="tag" style="background:${prog?prog.colorBg:'var(--surface-2)'}; color:${prog?prog.color:'var(--text-muted)'}; font-weight:800">${p.program}</span>
+          <span style="font-size:11px; color:var(--text-muted); font-weight:700">Project ID: ${p.id}</span>
+        </div>
+        <div style="font-size:24px; font-weight:800; color:#0F172A; font-family:'DM Serif Display', serif">${p.name}</div>
+      </div>
+      <div style="display:flex; gap:8px">
+        ${statusBadge(p.status)}
+        ${priorityBadge(p.priority)}
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="kpi" style="--kpi-accent:var(--accent)">
+      <div class="kpi-label">Timeline</div>
+      <div class="kpi-value" style="font-size:14px">${p.startDate} - ${p.endDate}</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:var(--green)">
+      <div class="kpi-label">Completion</div>
+      <div class="kpi-value">${p.progress}%</div>
+      <div class="progress-bar" style="height:4px; margin-top:8px"><div class="progress-fill" style="width:${p.progress}%; background:var(--green)"></div></div>
+    </div>
+    <div class="kpi" style="--kpi-accent:var(--purple)">
+      <div class="kpi-label">Project Budget</div>
+      <div class="kpi-value">₹${fmt(p.budget)}</div>
+      <div class="kpi-sub">${pct(p.spent,p.budget)}% utilised</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:var(--amber)">
+      <div class="kpi-label">Task Velocity</div>
+      <div class="kpi-value">${p.tasksComplete} / ${p.tasks}</div>
+      <div class="kpi-sub">Completed milestones</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-bottom:14px"><i class="ti ti-list-check"></i>Task Management Board</div>
+  <div class="grid-3" style="align-items: flex-start">
+    ${['Complete','In Progress','Overdue'].map(s=>`
+      <div class="card card-sm">
+        <div class="card-title" style="color:${s==='Complete'?'#059669':s==='In Progress'?'#2563EB':'#DC2626'}; font-weight:800">
+          <i class="ti ti-${s==='Complete'?'circle-check':s==='In Progress'?'clock':'alert-circle'}"></i>
+          ${s} (${tasks.filter(t=>t.status===s).length})
+        </div>
+        ${tasks.filter(t=>t.status===s).length ? tasks.filter(t=>t.status===s).map(t=>`
+          <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:10px; border-left:3px solid ${s==='Complete'?'#059669':s==='In Progress'?'#2563EB':'#DC2626'}">
+            <div style="font-size:13px; font-weight:700; color:#0F172A; margin-bottom:6px">${t.name}</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+              <span class="badge badge-gray" style="font-size:9px">${t.type}</span>
+              <span style="font-size:10px; color:var(--text-muted); font-weight:700"><i class="ti ti-calendar" style="font-size:11px"></i> ${t.due}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; border-top:1px solid var(--border); padding-top:8px; margin-top:4px">
+              <div class="avatar" style="width:20px; height:20px; font-size:8px; background:var(--accent); color:#fff">${t.assignee.split(' ').map(n=>n[0]).join('')}</div>
+              <span style="font-size:10.5px; color:#475569; font-weight:600">${t.assignee}</span>
+            </div>
+          </div>`).join('') : `<div style="padding:20px; text-align:center; color:var(--text-muted); font-size:11px">No tasks in this stage</div>`}
+      </div>`).join('')}
+  </div>`;
+}
+
+window.setProjectProgramFilter = function(val) {
+  projectProgramFilter = val;
+  render();
+};
+
+window.setSelectedProject = function(id) {
+  selectedProjectId = id;
+  render();
+};
+
+/* ─── BUDGETING ─────────────────────────────────────── */
+function buildBudgeting(){
+  const totalBudget = DATA.programs.reduce((a,p)=>a+p.budget,0);
+  const totalSpent  = DATA.programs.reduce((a,p)=>a+p.spent,0);
+  const variance    = totalBudget - totalSpent;
+  return `
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="kpi" style="--kpi-accent:#1847A8">
+      <div class="kpi-label">Portfolio Budget</div><div class="kpi-value">₹${fmt(totalBudget)}</div>
+      <div class="kpi-sub">FY 2024–2027 approved envelope</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#B45309">
+      <div class="kpi-label">Total Committed</div><div class="kpi-value">₹${fmt(totalSpent)}</div>
+      <div class="kpi-sub">${pct(totalSpent,totalBudget)}% of total budget utilised</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#0D7A5F">
+      <div class="kpi-label">Budget Remaining</div><div class="kpi-value" style="color:var(--green)">₹${fmt(variance)}</div>
+      <div class="kpi-sub ok">${100-pct(totalSpent,totalBudget)}% headroom available</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:#B91C1C">
+      <div class="kpi-label">Programs Near Limit</div><div class="kpi-value" style="color:var(--amber)">2</div>
+      <div class="kpi-sub warn">&gt;75% budget consumed</div>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-bar"></i>Budget vs Spend by Program</div>
+      <div class="chart-wrap" style="height:250px"><canvas id="budgetVsSpendChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><i class="ti ti-chart-pie"></i>Vendor Spend Distribution</div>
+      <div class="chart-wrap" style="height:250px"><canvas id="vendorSpendChart"></canvas></div>
+    </div>
+  </div>
+  <div class="section-title" style="margin-bottom:14px"><i class="ti ti-table"></i>Project-Level Budget Breakdown</div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Project</th><th>Program</th><th>Approved Budget</th><th>Committed</th><th>Remaining</th><th>Utilisation</th><th>Health</th></tr></thead>
+        <tbody>
+          ${DATA.projects.map(p=>{
+            const rem=p.budget-p.spent; const util=pct(p.spent,p.budget);
+            return`<tr>
+              <td style="font-weight:600">${p.name}</td>
+              <td><span class="tag">${p.program}</span></td>
+              <td>₹${fmt(p.budget)}</td>
+              <td>₹${fmt(p.spent)}</td>
+              <td style="color:${rem<500000?'var(--red)':'var(--green)'}">₹${fmt(rem)}</td>
+              <td style="min-width:130px">
+                <div style="display:flex;align-items:center;gap:7px">
+                  <div class="progress-bar" style="flex:1;height:7px"><div class="progress-fill" style="width:${util}%;background:${util>80?'#EF4444':util>60?'#F59E0B':'#10B981'}"></div></div>
+                  <span style="font-size:11px;color:var(--text-muted);min-width:28px">${util}%</span>
+                </div>
+              </td>
+              <td>${util>80?statusBadge('At Risk'):statusBadge('Active')}</td>
+            </tr>`;}).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+/* ─── RISKS ─────────────────────────────────────────── */
+function buildRisks(){
+  const tabs=['Active Risks','Open Issues','Escalated Items'];
+  const riskStats = [
+    { label: 'Total Risks', val: DATA.risks.length, color: 'var(--accent)' },
+    { label: 'Critical Score', val: DATA.risks.filter(r=>r.score>=15).length, color: 'var(--red)' },
+    { label: 'Open Issues', val: DATA.issues.filter(i=>i.status!=='Resolved').length, color: 'var(--amber)' },
+    { label: 'Escalations', val: DATA.risks.filter(r=>r.escalated).length + DATA.issues.filter(i=>i.status==='Critical').length, color: 'var(--purple)' }
+  ];
+
+  return `
+  <div class="grid-4" style="margin-bottom:20px">
+    ${riskStats.map(s=>`
+      <div class="kpi" style="--kpi-accent:${s.color}">
+        <div class="kpi-label">${s.label}</div>
+        <div class="kpi-value" style="color:${s.color}">${s.val}</div>
+      </div>`).join('')}
+  </div>
+
+  <div class="tabs">${tabs.map((t,i)=>`<div class="tab ${activeSubTab===i?'active':''}" onclick="setSubTab(${i})">${t}</div>`).join('')}</div>
+
+  ${activeSubTab === 0 ? buildRisksTab() : activeSubTab === 1 ? buildIssuesTab() : buildEscalationsTab()}
+  `;
+}
+
+function buildRisksTab(){
+  const filteredRisks = (riskFilter.impact && riskFilter.prob) 
+    ? DATA.risks.filter(r => r.impact === riskFilter.impact && r.probability === riskFilter.prob)
+    : DATA.risks;
+
+  return `
+  <div class="grid-2" style="margin-bottom:20px; grid-template-columns: 360px 1fr">
+    <div class="card" style="padding:16px">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px">
+        <div class="card-title" style="margin:0"><i class="ti ti-grid-dots"></i>Risk Severity Matrix</div>
+        ${(riskFilter.impact) ? `<button class="btn btn-sm btn-ghost" style="color:var(--accent); font-weight:700" onclick="setRiskFilter(null, null)">Clear Filter</button>` : ''}
+      </div>
+      
+      <div style="display:flex; gap:10px">
+        <!-- Vertical Y-Axis Label -->
+        <div style="writing-mode: vertical-lr; transform: rotate(180deg); text-align:center; font-size:9px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px">Impact</div>
+        
+        <div style="flex:1">
+          <div style="display:flex; flex-direction:column; gap:3px">
+            ${[5,4,3,2,1].map(impact => `
+              <div style="display:flex; gap:3px; align-items:stretch">
+                <div style="width:12px; font-size:10px; color:var(--text-muted); font-weight:700; display:flex; align-items:center; justify-content:center">${impact}</div>
+                ${[1,2,3,4,5].map(prob => {
+                  const score = prob * impact;
+                  const c = riskColor(score);
+                  const count = DATA.risks.filter(r => r.probability === prob && r.impact === impact).length;
+                  const isSelected = riskFilter.impact === impact && riskFilter.prob === prob;
+                  
+                  // Visual logic
+                  const bg = isSelected ? c.color : (count > 0 ? c.color + 'CC' : c.bg);
+                  const text = (count > 0 || isSelected) ? '#fff' : c.color + '40';
+                  const border = isSelected ? '2px solid var(--text-primary)' : `1px solid ${c.color}30`;
+                  const opacity = (riskFilter.impact && !isSelected) ? '0.4' : '1';
+
+                  return `<div onclick="setRiskFilter(${impact}, ${prob})" 
+                    style="flex:1; aspect-ratio:1; border-radius:4px; background:${bg}; border:${border}; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:${text}; transition:all .15s; cursor:pointer; opacity:${opacity}; box-shadow:${isSelected?'var(--shadow-md)':'none'}" 
+                    title="Impact ${impact}, Prob ${prob}: Score ${score}">
+                    ${count > 0 ? count : ''}
+                  </div>`;
+                }).join('')}
+              </div>
+            `).join('')}
+            
+            <!-- X-Axis Numbers -->
+            <div style="display:flex; gap:3px; padding-left:15px; margin-top:4px">
+              ${[1,2,3,4,5].map(p => `<div style="flex:1; text-align:center; font-size:10px; color:var(--text-muted); font-weight:700">${p}</div>`).join('')}
+            </div>
+            
+            <!-- X-Axis Label -->
+            <div style="text-align:center; font-size:9px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px">Probability</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-top:20px; justify-content:center; border-top:1px solid var(--border); padding-top:16px">
+        <span style="display:flex; align-items:center; gap:5px; font-size:10px; font-weight:700; color:#B91C1C"><span style="width:10px; height:10px; border-radius:2px; background:#B91C1C"></span>EXTREME</span>
+        <span style="display:flex; align-items:center; gap:5px; font-size:10px; font-weight:700; color:#B45309"><span style="width:10px; height:10px; border-radius:2px; background:#B45309"></span>HIGH</span>
+        <span style="display:flex; align-items:center; gap:5px; font-size:10px; font-weight:700; color:#0D7A5F"><span style="width:10px; height:10px; border-radius:2px; background:#0D7A5F"></span>LOW</span>
+      </div>
+      <div style="margin-top:12px; font-size:10.5px; color:var(--text-muted); text-align:center; font-style:italic">Click any cell to filter the register below</div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">
+        <i class="ti ti-list"></i>
+        ${riskFilter.impact ? `Risks with Impact ${riskFilter.impact} & Probability ${riskFilter.prob}` : 'Active Risk Register'}
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Risk Detail & Mitigation</th><th>Owner</th><th>Project</th><th>Score</th><th>Next Review</th></tr></thead>
+          <tbody>
+            ${filteredRisks.length ? filteredRisks.map(r => {
+              const c = riskColor(r.score);
+              const owner = DATA.users.find(u => u.name === r.owner) || { avatar: '??' };
+              return `
+              <tr>
+                <td style="font-family:monospace; color:var(--text-muted)">${r.id}</td>
+                <td style="min-width:240px">
+                  <div style="font-weight:600; color:var(--text-primary); margin-bottom:4px">${r.title}</div>
+                  <div style="font-size:10.5px; color:var(--text-secondary); line-height:1.3; background:var(--surface-2); padding:6px 8px; border-radius:4px; border-left:2px solid ${c.color}">
+                    <span style="font-weight:700; font-size:9px; text-transform:uppercase; display:block; margin-bottom:2px">Mitigation Plan:</span>
+                    ${r.mitigation}
+                  </div>
+                </td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:8px">
+                    <div class="avatar" style="background:var(--accent-light); color:var(--accent); font-size:10px">${owner.avatar}</div>
+                    <div style="font-size:11.5px">${r.owner}</div>
+                  </div>
+                </td>
+                <td><span class="tag">${r.project}</span></td>
+                <td><span style="background:${c.bg}; color:${c.color}; padding:2px 8px; border-radius:4px; font-weight:800; font-size:12px">${r.score}</span></td>
+                <td style="font-size:11px; color:var(--text-muted); font-weight:600">${r.nextReview}</td>
+              </tr>`;
+            }).join('') : `<tr><td colspan="6" style="padding:40px; text-align:center; color:var(--text-muted)">No risks found for this selection</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>`;
+}
+
+window.setRiskFilter = function(i, p) {
+  if (riskFilter.impact === i && riskFilter.prob === p) {
+    riskFilter = { impact: null, prob: null };
+  } else {
+    riskFilter = { impact: i, prob: p };
+  }
+  render();
+};
+
+function buildIssuesTab(){
+  return `
+  <div class="card">
+    <div class="card-title"><i class="ti ti-bug"></i>Issue Tracker</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ID</th><th>Issue & Action Taken</th><th>Severity</th><th>Status</th><th>Owner</th><th>Project</th><th>Target Date</th></tr></thead>
+        <tbody>
+          ${DATA.issues.map(i => {
+            const owner = DATA.users.find(u => u.name === i.owner) || { avatar: '??' };
+            const isCritical = i.severity === 'Critical';
+            return `
+            <tr>
+              <td style="font-family:monospace; color:var(--text-muted)">${i.id}</td>
+              <td style="min-width:240px">
+                <div style="font-weight:600; color:var(--text-primary); margin-bottom:4px">${i.title}</div>
+                <div style="font-size:10.5px; color:var(--text-secondary); line-height:1.3; background:var(--surface-2); padding:6px 8px; border-radius:4px; border-left:2px solid ${isCritical ? 'var(--red)' : 'var(--accent)'}">
+                  <span style="font-weight:700; font-size:9px; text-transform:uppercase; display:block; margin-bottom:2px">Current Action:</span>
+                  ${i.action}
+                </div>
+              </td>
+              <td>${statusBadge(i.severity)}</td>
+              <td>${statusBadge(i.status)}</td>
+              <td>
+                <div style="display:flex; align-items:center; gap:8px">
+                  <div class="avatar" style="background:var(--accent-light); color:var(--accent); font-size:10px">${owner.avatar}</div>
+                  <div style="font-size:11.5px">${i.owner}</div>
+                </div>
+              </td>
+              <td><span class="tag">${i.project}</span></td>
+              <td style="font-size:11px; color:var(--text-muted); font-weight:600">${i.targetDate}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function buildEscalationsTab(){
+  const escalatedRisks = DATA.risks.filter(r => r.escalated);
+  const criticalIssues = DATA.issues.filter(i => i.severity === 'Critical' || i.status === 'Overdue');
+  
+  return `
+  <div class="alert-row alert-danger" style="margin-bottom:20px; padding:16px">
+    <i class="ti ti-alert-octagon" style="font-size:20px"></i>
+    <div>
+      <div style="font-weight:700; font-size:14px">Attention Required: PMO Review Pending</div>
+      <div style="font-size:12px; opacity:0.9; margin-top:2px">The following items have been escalated due to high impact or schedule slippage. Please provide guidance or sign-off on mitigation plans.</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--red)"><i class="ti ti-arrow-up-right"></i>Escalated Risks (${escalatedRisks.length})</div>
+      ${escalatedRisks.map(r => `
+        <div style="background:var(--red-bg); border:1px solid #FCA5A5; border-radius:8px; padding:12px; margin-bottom:10px">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px">
+            <div style="font-weight:700; color:#991B1B">${r.title}</div>
+            <span style="background:#991B1B; color:white; padding:2px 8px; border-radius:4px; font-weight:800; font-size:11px">SCORE ${r.score}</span>
+          </div>
+          <div style="font-size:11.5px; color:#991B1B; margin-bottom:8px">${r.mitigation}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(153,27,27,0.1); padding-top:8px">
+            <span style="font-size:10px; font-weight:700; text-transform:uppercase">${r.project}</span>
+            <span style="font-size:11px; font-weight:600">Owner: ${r.owner}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:var(--red)"><i class="ti ti-alert-circle"></i>Critical Issues (${criticalIssues.length})</div>
+      ${criticalIssues.map(i => `
+        <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:10px; border-left:4px solid var(--red)">
+          <div style="font-weight:700; color:var(--text-primary); margin-bottom:6px">${i.title}</div>
+          <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:8px">${i.action}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px">
+            <span class="tag">${i.project}</span>
+            <span style="color:var(--red); font-weight:700">Target: ${i.targetDate}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+/* ─── VENDORS ───────────────────────────────────────── */
+function buildVendors(){
+  const approvedVendors = DATA.vendors.filter(v=>v.status==='Approved');
+  const avgPerf = Math.round(approvedVendors.reduce((a,v)=>a+v.performance,0)/approvedVendors.length);
+  const totalSpend = DATA.vendors.reduce((a,v)=>a+v.spend,0);
+
+  return `
+  <div class="section-heading">
+    <div>
+      <div class="section-title"><i class="ti ti-building-community"></i>Vendor Management</div>
+      <div class="section-sub">Overview of partner performance, spend, and onboarding status</div>
+    </div>
+    <div style="display:flex; gap:8px">
+      <button class="btn btn-primary btn-sm" onclick="openModal('vendor',{})"><i class="ti ti-plus"></i>Onboard Partner</button>
+    </div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:20px">
+    <div class="kpi" style="--kpi-accent:var(--accent)">
+      <div class="kpi-label">Active Vendors</div>
+      <div class="kpi-value">${approvedVendors.length}</div>
+      <div class="kpi-sub ok">${DATA.vendors.length} total partners</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:var(--green)">
+      <div class="kpi-label">Avg Performance</div>
+      <div class="kpi-value">${avgPerf}%</div>
+      <div class="kpi-sub ok">Above benchmark</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:var(--purple)">
+      <div class="kpi-label">Total Spend</div>
+      <div class="kpi-value">₹${fmt(totalSpend)}</div>
+      <div class="kpi-sub">Committed budget</div>
+    </div>
+    <div class="kpi" style="--kpi-accent:var(--amber)">
+      <div class="kpi-label">Pending Approval</div>
+      <div class="kpi-value" style="color:var(--amber)">${DATA.vendors.filter(v=>v.status!=='Approved').length}</div>
+      <div class="kpi-sub warn">Under review</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="card-title" style="color:#0F172A; font-weight:800"><i class="ti ti-chart-bar"></i>Performance Ranking</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="vendorPerfRankChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:#0F172A; font-weight:800"><i class="ti ti-chart-bar"></i>Spend per Vendor</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="vendorSpendBarChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color:#0F172A; font-weight:800"><i class="ti ti-table"></i>Vendor Directory</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="color:#0F172A; font-weight:800">Partner</th>
+            <th style="color:#0F172A; font-weight:800">Type</th>
+            <th style="color:#0F172A; font-weight:800">Status</th>
+            <th style="color:#0F172A; font-weight:800">Performance Score</th>
+            <th style="color:#0F172A; font-weight:800">Total Spend</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${DATA.vendors.map(v=>`
+          <tr>
+            <td style="min-width:180px">
+              <div style="display:flex; align-items:center; gap:10px">
+                <div class="avatar" style="background:var(--accent-light); color:var(--accent); font-weight:700">${v.avatar||v.name.substring(0,2)}</div>
+                <div style="font-weight:700; color:#0F172A">${v.name}</div>
+              </div>
+            </td>
+            <td><span class="tag" style="font-weight:700">${v.type}</span></td>
+            <td>${statusBadge(v.status)}</td>
+            <td style="min-width:140px">
+              <div style="display:flex; align-items:center; gap:8px">
+                <div class="progress-bar" style="flex:1; height:6px; background:#F1F5F9"><div class="progress-fill" style="width:${v.performance}%; background:${v.performance>=85?'#059669':'#D97706'}"></div></div>
+                <span style="font-weight:900; color:#0F172A; font-size:12px">${v.performance}%</span>
+              </div>
+            </td>
+            <td style="font-weight:800; color:#0F172A">₹${fmtL(v.spend)}</td>
+            <td style="text-align:right">
+              <button class="btn btn-sm" onclick="openModal('vendor',${JSON.stringify(v).replace(/"/g,'&quot;')})">View</button>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+
+/* ─── STRATEGY HOUSE ────────────────────────────────── */
+function buildStrategy(){
+  const s = DATA.strategy;
+  const tracks = s.tracks;
+
+  // Build row HTML for initiatives
+  function initRow(rowData, isAI) {
+    return `
+      <div class="sh-corner" style="background:${isAI?'#F0F4FF':''}"></div>
+      ${rowData.map((cell,i)=>`
+        <div class="sh-cell${isAI?' sh-cell-ai':''}" style="border-right:${i===rowData.length-1?'none':'1px solid var(--border)'}">
+          ${cell||'<span style="color:var(--border-2)">—</span>'}
+        </div>`).join('')}
+    `;
+  }
+
+  // Track header colors
+  const trackHeaderHTML = tracks.map((t,i)=>`
+    <div class="sh-track-header" style="background:${t.color}">
+      <div class="sh-track-icon"><i class="ti ${t.icon}"></i></div>
+      ${t.name}
+    </div>`).join('');
+
+  // Enabler rows
+  const enablerRows = s.enablers.map(e=>`
+    <div class="sh-row-label" style="background:${e.bg}">
+      <div class="sh-row-label-text">${e.name}</div>
+    </div>
+    ${e.cells.map((c,i)=>`
+      <div class="sh-cell" style="background:#FAFBFF;border-right:${i===e.cells.length-1?'none':'1px solid var(--border)'}">
+        ${c}
+      </div>`).join('')}
+  `).join('');
+
+  // Outcome row
+  const outcomeRow = `
+    <div class="sh-outcome-label">
+      <div class="sh-outcome-label-text">Key Performance Indicator</div>
+    </div>
+    ${s.outcomes.map((o,i)=>`
+      <div class="sh-outcome-cell" style="border-right:${i===s.outcomes.length-1?'none':'1px solid var(--border)'}">
+        <div class="sh-outcome-metric">${o.metric}</div>
+        <div class="sh-outcome-sub">${o.sub}</div>
+      </div>`).join('')}
+  `;
+
+  return `
+  <!-- Header strip -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+    <div>
+      <div class="section-title"><i class="ti ti-target"></i>Strategy House</div>
+      <div class="section-sub">${s.phase}</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="badge badge-accent">Vision 2035</span>
+      <button class="btn btn-sm" onclick="showNotification('Strategy exported to PDF')"><i class="ti ti-download"></i>Export</button>
+    </div>
+  </div>
+
+  <!-- ── THE HOUSE ──────────────────────────────────── -->
+  <div class="sh-wrapper">
+
+    <!-- Vision roof -->
+    <div class="sh-vision">
+      <div class="sh-vision-text">
+        <div class="sh-vision-label">Vision 2035</div>
+        <div class="sh-vision-title"><strong>${s.vision.split('reduction')[0].trim()}</strong> reduction in avoidable corneal blindness in India</div>
+        <div class="sh-vision-tagline">${s.mission}</div>
+      </div>
+    </div>
+
+    <!-- Grid body -->
+    <div class="sh-grid">
+
+      <!-- Track headers row -->
+      <div class="sh-corner" style="background:var(--surface-2)"></div>
+      ${trackHeaderHTML}
+
+      <!-- Initiative rows 1–3 -->
+      ${s.initiatives.slice(0,3).map(row=>initRow(row,false)).join('')}
+
+      <!-- AI row -->
+      <div class="sh-corner" style="background:#F0F4FF;border-right:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center">
+        <div style="font-size:9.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.8px;text-align:center;padding:0 6px">AI &<br>Tech</div>
+      </div>
+      ${s.initiatives[3].map((cell,i)=>`
+        <div class="sh-cell sh-cell-ai" style="border-right:${i===3?'none':'1px solid var(--border)'}">
+          <i class="ti ti-sparkles" style="font-size:12px;margin-right:5px;flex-shrink:0"></i>${cell}
+        </div>`).join('')}
+
+      <!-- Enabler rows -->
+      ${enablerRows}
+
+      <!-- KPI outcome row -->
+      ${outcomeRow}
+
+    </div>
+  </div>
+
+  <!-- ── PILLAR PROGRESS ────────────────────────────── -->
+  <div class="sh-pillar-progress">
+    <div class="sh-progress-header">
+      <div class="sh-progress-title" style="color:#0F172A; font-weight:800">Strategic Pillar Performance vs. Target</div>
+      <span class="badge badge-gray" style="font-size:10px; font-weight:700">FY 2024–25 · Mid-year review</span>
+    </div>
+    <div class="sh-pillars-grid">
+      ${s.pillars.map(p=>`
+        <div class="sh-pillar-block" style="border-top:4px solid ${p.color}; background:#fff">
+          <div class="sh-pillar-name" style="color:${p.color}; font-weight:900">${p.name.toUpperCase()}</div>
+          ${p.measures.map(m=>{
+            const pv=Math.min(Math.round(m.actual/m.target*100),100);
+            const mc=pv>=90?'#059669':pv>=65?'#2563EB':'#D97706';
+            return`<div class="sh-measure">
+              <div class="sh-measure-label" style="margin-bottom:6px">
+                <span style="color:#475569; font-weight:700">${m.name}</span>
+                <span class="sh-measure-pct" style="color:${mc}; font-weight:900; font-size:12px">${pv}%</span>
+              </div>
+              <div class="progress-bar" style="height:8px; background:${p.color}15"><div class="progress-fill" style="width:${pv}%; background:${p.color}; border-radius:4px"></div></div>
+              <div style="display:flex; justify-content:space-between; margin-top:5px; font-size:10px; color:var(--text-muted); font-weight:700">
+                <span>${fmtL(m.actual)}${m.unit?` ${m.unit}`:''} <span style="font-weight:500">actual</span></span>
+                <span>Target: ${fmtL(m.target)}${m.unit?` ${m.unit}`:''}</span>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>`).join('')}
+    </div>
+  </div>
+
+  <!-- ── CHARTS ──────────────────────────────────────── -->
+  <div class="sh-charts" style="grid-template-columns: 1fr">
+    <div class="card">
+      <div class="card-title" style="color:#0F172A; font-weight:800"><i class="ti ti-chart-radar"></i>Strategic KPI Achievement</div>
+      <div class="chart-wrap" style="height:320px"><canvas id="strategyChart"></canvas></div>
+    </div>
+  </div>`;
+}
+
+/* ─── MODAL ─────────────────────────────────────────── */
+function buildModal(){
+  const {type,data}=modal;
+  let content='';
+
+  if(type==='task'){
+    content=`
+      <div class="modal-title">Add New Task</div>
+      <div class="form-group"><label class="form-label">Task Name</label><input class="form-input" placeholder="Describe the task..."></div>
+      <div class="form-group"><label class="form-label">Project</label><select class="form-select">${DATA.projects.map(p=>`<option>${p.name}</option>`).join('')}</select></div>
+      <div class="form-group"><label class="form-label">Assignee</label><select class="form-select">${DATA.users.map(u=>`<option>${u.name}</option>`).join('')}</select></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">Priority</label><select class="form-select"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+        <div class="form-group"><label class="form-label">Due Date</label><input class="form-input" type="date"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Dependency Type</label><select class="form-select"><option>FS — Finish to Start</option><option>FF — Finish to Finish</option><option>SS — Start to Start</option><option>SF — Start to Finish</option></select></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="showNotification('Task created successfully');closeModal()"><i class="ti ti-check"></i>Create Task</button>
+      </div>`;
+  } else if(type==='risk'){
+    content=`
+      <div class="modal-title">Log Risk / Issue</div>
+      <div class="form-group"><label class="form-label">Title</label><input class="form-input" placeholder="Describe the risk..."></div>
+      <div class="form-group"><label class="form-label">Project</label><select class="form-select">${DATA.projects.map(p=>`<option>${p.id}: ${p.name}</option>`).join('')}</select></div>
+      <div class="form-group"><label class="form-label">Category</label><select class="form-select"><option>Schedule</option><option>Budget</option><option>Technical</option><option>Vendor</option><option>Regulatory</option><option>Adoption</option></select></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">Probability (1–5)</label><input class="form-input" type="number" min="1" max="5" value="3"></div>
+        <div class="form-group"><label class="form-label">Impact (1–5)</label><input class="form-input" type="number" min="1" max="5" value="3"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Risk Owner</label><select class="form-select">${DATA.users.map(u=>`<option>${u.name}</option>`).join('')}</select></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger" onclick="showNotification('Risk logged and assigned');closeModal()"><i class="ti ti-alert-triangle"></i>Log Risk</button>
+      </div>`;
+  } else if(type==='budget'){
+    content=`
+      <div class="modal-title">Update Budget Allocation</div>
+      <div class="form-group"><label class="form-label">Program / Project</label><select class="form-select">${DATA.programs.map(p=>`<option>${p.name}</option>`).join('')}</select></div>
+      <div class="form-group"><label class="form-label">Allocation Type</label><select class="form-select"><option>Initial Budget</option><option>Budget Revision</option><option>Vendor Payment</option><option>Contingency Release</option></select></div>
+      <div class="form-group"><label class="form-label">Amount (₹)</label><input class="form-input" type="number" placeholder="0"></div>
+      <div class="form-group"><label class="form-label">Approval Reference / Notes</label><input class="form-input" placeholder="Notes..."></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="showNotification('Budget update submitted for approval');closeModal()"><i class="ti ti-check"></i>Submit for Approval</button>
+      </div>`;
+  } else if(type==='vendor'){
+    const v=data;
+    content = v.name ? `
+      <div class="modal-title">${v.name}</div>
+      <div class="grid-3" style="margin-bottom:16px">
+        <div class="kpi" style="--kpi-accent:var(--accent)"><div class="kpi-label">Status</div><div style="margin-top:6px">${statusBadge(v.status)}</div></div>
+        <div class="kpi" style="--kpi-accent:var(--green)"><div class="kpi-label">Performance</div><div class="kpi-value" style="font-size:20px">${v.performance}%</div></div>
+        <div class="kpi" style="--kpi-accent:var(--amber)"><div class="kpi-label">Total Spend</div><div class="kpi-value" style="font-size:20px">₹${fmt(v.spend)}</div></div>
+      </div>
+      <div class="form-group"><label class="form-label">Vendor Name</label><input class="form-input" value="${v.name}"></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">Type</label><input class="form-input" value="${v.type}"></div>
+        <div class="form-group"><label class="form-label">Country</label><input class="form-input" value="${v.country}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Lead Contact</label><input class="form-input" value="${v.lead}"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+        <button class="btn" onclick="closeModal()">Close</button>
+        <button class="btn btn-primary" onclick="showNotification('Vendor updated');closeModal()"><i class="ti ti-check"></i>Save Changes</button>
+      </div>` : `
+      <div class="modal-title">Onboard New Vendor</div>
+      <div class="form-group"><label class="form-label">Company Name</label><input class="form-input" placeholder="Vendor company name..."></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">Type</label><select class="form-select"><option>AI/ML</option><option>Software</option><option>Diagnostics</option><option>Logistics</option><option>Analytics</option></select></div>
+        <div class="form-group"><label class="form-label">Country</label><input class="form-input" placeholder="Country..."></div>
+      </div>
+      <div class="form-group"><label class="form-label">Lead Contact</label><input class="form-input" placeholder="Name..."></div>
+      <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" type="email" placeholder="email@vendor.com"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="showNotification('Vendor submitted for review');closeModal()"><i class="ti ti-check"></i>Submit for Review</button>
+      </div>`;
+  } else if(type==='program'){
+    const p=data;
+    const projs=DATA.projects.filter(pr=>pr.program===(p.short||p.name)||p.projects?.includes(pr.id));
+    content = p.name ? `
+      <div class="modal-title" style="color:${p.color}">${p.name}</div>
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="kpi" style="--kpi-accent:${p.color}"><div class="kpi-label">Budget</div><div class="kpi-value" style="font-size:20px">₹${fmt(p.budget)}</div></div>
+        <div class="kpi" style="--kpi-accent:${p.color}"><div class="kpi-label">Progress</div><div class="kpi-value" style="font-size:20px">${p.progress}%</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Projects in this Programme</div>
+      ${projs.map(pr=>`<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:9px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:12.5px;font-weight:600">${pr.name}</div><div style="font-size:10.5px;color:var(--text-muted)">${pr.lead}</div></div>
+        <div style="display:flex;align-items:center;gap:8px">${statusBadge(pr.status)}<span style="font-size:11px;color:var(--text-muted)">${pr.progress}%</span></div>
+      </div>`).join('')}
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+        <button class="btn" onclick="closeModal()">Close</button>
+      </div>` : `
+      <div class="modal-title">Add New Programme</div>
+      <div class="form-group"><label class="form-label">Programme Name</label><input class="form-input" placeholder="Name..."></div>
+      <div class="form-group"><label class="form-label">Programme Lead</label><select class="form-select">${DATA.users.map(u=>`<option>${u.name}</option>`).join('')}</select></div>
+      <div class="grid-2">
+        <div class="form-group"><label class="form-label">Start Date</label><input class="form-input" type="date"></div>
+        <div class="form-group"><label class="form-label">End Date</label><input class="form-input" type="date"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Approved Budget (₹)</label><input class="form-input" type="number" placeholder="0"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="showNotification('Programme created');closeModal()"><i class="ti ti-check"></i>Create Programme</button>
+      </div>`;
+  } else if(type==='project'){
+    const p=data;
+    const tasks=DATA.tasks.filter(t=>t.project===p.id);
+    content=`
+      <div class="modal-title">${p.name}</div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">${statusBadge(p.status)}${priorityBadge(p.priority)}<span style="font-size:12px;color:var(--text-muted)">Lead: ${p.lead}</span></div>
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="kpi" style="--kpi-accent:var(--accent)"><div class="kpi-label">Budget</div><div class="kpi-value" style="font-size:20px">₹${fmt(p.budget)}</div></div>
+        <div class="kpi" style="--kpi-accent:var(--green)"><div class="kpi-label">Progress</div><div class="kpi-value" style="font-size:20px">${p.progress}%</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Tasks (${tasks.length})</div>
+      ${tasks.length?tasks.map(t=>`
+        <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:9px;margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:12.5px;font-weight:600">${t.name}</div>${statusBadge(t.status)}
+          </div>
+          <div style="display:flex;gap:12px;margin-top:4px;font-size:10.5px;color:var(--text-muted)">
+            <span>${t.assignee}</span><span>Due: ${t.due}</span>
+            ${t.dep?`<span class="tag">Dep: ${t.dep} (${t.type})</span>`:''}
+          </div>
+        </div>`).join(''):'<div style="padding:24px;text-align:center;color:var(--text-muted)">No tasks logged yet</div>'}
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+        <button class="btn" onclick="closeModal()">Close</button>
+        <button class="btn btn-primary" onclick="showNotification('Task added');closeModal()"><i class="ti ti-plus"></i>Add Task</button>
+      </div>`;
+  }
+
+  return `<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal">${content}</div></div>`;
+}
+
+/* ─── CHARTS ────────────────────────────────────────── */
+const COLORS = ['#1847A8','#0D7A5F','#B45309','#6D28D9','#0891B2'];
+let chartInstances = {};
+function initCharts(){
+  const grid = '#E2E8F0';
+  const tick = '#475569';
+  const textDark = '#0F172A';
+  const defaults = { 
+    responsive:true, 
+    maintainAspectRatio:false, 
+    plugins:{
+      legend:{
+        labels:{
+          color:tick,
+          font:{size:11,family:'DM Sans',weight:'500'},
+          usePointStyle:true,
+          padding:15
+        }
+      }
+    } 
+  };
+
+  function setChart(id, config){
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(chartInstances[id]) chartInstances[id].destroy();
+    chartInstances[id] = new Chart(el, config);
+  }
+
+  setChart('budgetChart',{type:'doughnut',data:{
+    labels:DATA.programs.map(p=>p.short||p.name),
+    datasets:[{data:DATA.programs.map(p=>p.spent),backgroundColor:COLORS,borderWidth:0,hoverOffset:10}]
+  },options:{...defaults,cutout:'72%',plugins:{legend:{position:'right',labels:{color:tick,font:{size:11,family:'DM Sans',weight:'600'},boxWidth:8}}}}});
+
+  setChart('progressChart',{type:'bar',data:{
+    labels:DATA.programs.map(p=>p.short||p.name),
+    datasets:[{data:DATA.programs.map(p=>p.progress),backgroundColor:COLORS.map(c=>c+'CC'),borderRadius:4,barThickness:12}]
+  },options:{...defaults,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{max:100,ticks:{color:tick,callback:v=>v+'%'},grid:{display:false}},y:{ticks:{color:tick,font:{size:11,weight:'600'}},grid:{display:false}}}}});
+
+  setChart('programBudgetChart',{type:'bar',data:{
+    labels:DATA.programs.map(p=>p.short||p.name),
+    datasets:[
+      {label:'Budget',data:DATA.programs.map(p=>p.budget),backgroundColor:'rgba(24,71,168,0.08)',borderColor:'#1847A8',borderWidth:1,borderRadius:6},
+      {label:'Spent', data:DATA.programs.map(p=>p.spent), backgroundColor:'rgba(13,122,95,0.8)',borderRadius:6}
+    ]
+  },options:{...defaults,scales:{x:{ticks:{color:tick,font:{weight:'600'}},grid:{display:false}},y:{ticks:{color:tick,callback:v=>fmtL(v)},grid:{color:grid,drawBorder:false}}}}});
+
+  setChart('budgetVsSpendChart',{type:'bar',data:{
+    labels:DATA.programs.map(p=>p.short||p.name),
+    datasets:[
+      {label:'Budget',data:DATA.programs.map(p=>p.budget),backgroundColor:'rgba(24,71,168,0.08)',borderColor:'#1847A8',borderWidth:1,borderRadius:6,barPercentage:0.65},
+      {label:'Spent', data:DATA.programs.map(p=>p.spent), backgroundColor:DATA.programs.map(p=>p.spent/p.budget>0.8?'#DC2626':'#10B981'),borderRadius:6,barPercentage:0.65}
+    ]
+  },options:{...defaults,scales:{x:{ticks:{color:tick,font:{weight:'600'}},grid:{display:false}},y:{ticks:{color:tick,callback:v=>fmtL(v)},grid:{color:grid,drawBorder:false}}}}});
+
+  setChart('vendorSpendChart',{type:'pie',data:{
+    labels:DATA.vendors.filter(v=>v.spend>0).map(v=>v.name),
+    datasets:[{data:DATA.vendors.filter(v=>v.spend>0).map(v=>v.spend),backgroundColor:COLORS,borderWidth:3,borderColor:'#fff'}]
+  },options:{...defaults,plugins:{legend:{position:'right',labels:{color:textDark,font:{size:11,family:'DM Sans',weight:'600'},boxWidth:10}},tooltip:{callbacks:{label:ctx=>' '+ctx.label+': ₹'+fmt(ctx.raw)}}}}});
+
+  setChart('riskCatChart',{type:'doughnut',data:{
+    labels:Object.keys(DATA.risks.reduce((a,r)=>{a[r.category]=(a[r.category]||0)+1;return a},{})),
+    datasets:[{data:Object.values(DATA.risks.reduce((a,r)=>{a[r.category]=(a[r.category]||0)+1;return a},{})),backgroundColor:['#EF4444','#F59E0B','#1847A8','#0D7A5F','#6D28D9','#0891B2'],borderWidth:3,borderColor:'#fff'}]
+  },options:{...defaults,cutout:'70%',plugins:{legend:{position:'right',labels:{color:textDark,font:{size:11,family:'DM Sans',weight:'600'},boxWidth:10}}}}});
+
+  setChart('vendorSpendPie', {
+    type: 'doughnut',
+    data: {
+      labels: DATA.vendors.filter(v=>v.spend>0).map(v=>v.name),
+      datasets: [{
+        data: DATA.vendors.filter(v=>v.spend>0).map(v=>v.spend),
+        backgroundColor: COLORS,
+        borderWidth: 0,
+        hoverOffset: 12
+      }]
+    },
+    options: {
+      ...defaults,
+      cutout: '75%',
+      plugins: {
+        legend: { 
+          position: 'bottom', 
+          labels: { color: textDark, font: { weight: '700', size: 10 }, usePointStyle: true, padding: 10 } 
+        },
+        tooltip: {
+          callbacks: { label: ctx => ` ₹${fmt(ctx.raw)} (${Math.round(ctx.parsed/totalSpend*100)}%)` }
+        }
+      }
+    }
+  });
+
+  // Vendor Performance Rank Bar
+  const vApproved = DATA.vendors.filter(v=>v.performance>0).sort((a,b)=>b.performance-a.performance);
+  setChart('vendorPerfRankChart', {
+    type: 'bar',
+    data: {
+      labels: vApproved.map(v=>v.name),
+      datasets: [{
+        label: 'Performance %',
+        data: vApproved.map(v=>v.performance),
+        backgroundColor: vApproved.map(v=>v.performance>=85?'rgba(5,150,105,0.8)':'rgba(217,119,6,0.8)'),
+        borderRadius: 4,
+        barThickness: 20
+      }]
+    },
+    options: {
+      ...defaults,
+      indexAxis: 'y',
+      scales: {
+        x: { max: 100, ticks: { color: tick }, grid: { display: false } },
+        y: { ticks: { color: textDark, font: { weight: '700' } }, grid: { display: false } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // Vendor Spend Bar
+  const vSpend = [...DATA.vendors].sort((a,b)=>b.spend-a.spend);
+  setChart('vendorSpendBarChart', {
+    type: 'bar',
+    data: {
+      labels: vSpend.map(v=>v.name),
+      datasets: [{
+        label: 'Spend (₹L)',
+        data: vSpend.map(v=>v.spend/100000),
+        backgroundColor: 'rgba(37,99,235,0.8)',
+        borderRadius: 4,
+        barThickness: 20
+      }]
+    },
+    options: {
+      ...defaults,
+      indexAxis: 'y',
+      scales: {
+        x: { ticks: { color: tick, callback: v=>v+'L' }, grid: { display: false } },
+        y: { ticks: { color: textDark, font: { weight: '700' } }, grid: { display: false } }
+      },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // Program Budget Horizontal Chart
+  setChart('programBudgetHBarChart', {
+    type: 'bar',
+    data: {
+      labels: DATA.programs.map(p=>p.short||p.name),
+      datasets: [
+        { label: 'Total Budget', data: DATA.programs.map(p=>p.budget), backgroundColor: 'rgba(15,23,42,0.05)', borderColor: '#0F172A', borderWidth: 1, borderRadius: 6, barPercentage: 0.6, grouped: false },
+        { label: 'Actual Spent', data: DATA.programs.map(p=>p.spent), backgroundColor: DATA.programs.map(p=>p.spent/p.budget>0.8?'#DC2626':'#2563EB'), borderRadius: 6, barPercentage: 0.6, grouped: false }
+      ]
+    },
+    options: {
+      ...defaults,
+      indexAxis: 'y',
+      scales: {
+        x: { ticks: { color: tick, callback: v=>fmtL(v) }, grid: { display: false } },
+        y: { ticks: { color: textDark, font: { weight: '700' } }, grid: { display: false } }
+      },
+      plugins: { legend: { position: 'bottom', labels: { color: textDark, font: { weight: '700' } } } }
+    }
+  });
+
+  // Portfolio Distribution
+  setChart('programDistributionChart', {
+    type: 'doughnut',
+    data: {
+      labels: DATA.programs.map(p=>p.short||p.name),
+      datasets: [{
+        data: DATA.programs.map(p=>p.budget),
+        backgroundColor: DATA.programs.map(p=>p.color),
+        borderWidth: 0,
+        hoverOffset: 15
+      }]
+    },
+    options: {
+      ...defaults,
+      cutout: '70%',
+      plugins: {
+        legend: { position: 'right', labels: { color: textDark, font: { weight: '700' }, boxWidth: 10 } }
+      }
+    }
+  });
+
+  // Strategy radar
+  const am=DATA.strategy.pillars.flatMap(p=>p.measures.slice(0,2));
+  setChart('strategyChart',{type:'radar',data:{
+    labels:am.map(m=>m.name),
+    datasets:[
+      {label:'Achievement',data:am.map(m=>Math.round(m.actual/m.target*100)),backgroundColor:'rgba(24,71,168,0.18)',borderColor:'#1847A8',borderWidth:3,pointBackgroundColor:'#1847A8',pointRadius:4},
+      {label:'Target (100%)',data:am.map(()=>100),backgroundColor:'transparent',borderColor:'rgba(71,85,105,0.2)',borderWidth:1,borderDash:[4,4],pointRadius:0}
+    ]
+  },options:{...defaults,scales:{r:{ticks:{display:false},grid:{color:'rgba(71,85,105,0.1)'},angleLines:{color:'rgba(71,85,105,0.1)'},pointLabels:{color:textDark,font:{size:11,family:'DM Sans',weight:'700'}}}},plugins:{legend:{labels:{color:textDark,font:{size:12,weight:'700'}}}}}});
+}
+
+window.setTab=function(t){activeTab=t;activeSubTab=0;render();};
+window.setSubTab=function(i){activeSubTab=i;render();};
+window.openModal=openModal;
+window.closeModal=closeModal;
+window.showNotification=showNotification;
+
+render();
+</script>
+</body>
+</html>
